@@ -30,8 +30,12 @@ class TLEdownload: public QObject
     QNetworkAccessManager manager;
     QList<QNetworkReply *> currentDownloads;
 
+private:
+    QStringList URLs;
+
 public:
     TLEdownload();
+    void setURLs(QStringList args);
     void doDownload(const QUrl &url);
     QString saveFileName(const QUrl &url);
     bool saveToDisk(const QString &filename, QIODevice *data);

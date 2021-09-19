@@ -5,10 +5,6 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-struct SearchBuffer {
-    string type, filename;
-};
-
-vector<TLEdata> SatSearch(fs::path& satPath);
+QList<TLEdata> SatSearch(fs::path& satPath);
 
 #endif // TLEPARSER_H

@@ -14,6 +14,12 @@ More About Sidereal Time:
 https://en.wikipedia.org/wiki/Sidereal_time#Sidereal_time
 https://celestrak.com/columns/v02n02/
 */
+satellite::satellite(){
+    this->a = cbrt( (G * Me) / pow(n, 2) );
+    this->t=QDateTime::currentDateTimeUtc();
+    this->satDate.setTimeSpec(Qt::UTC);
+    this->t.setTimeSpec(Qt::UTC);
+};
 
 satellite::satellite(std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1){
     this->e=e1; // eccentricity
@@ -26,7 +32,7 @@ satellite::satellite(std::string Epoch, float e1, float M, float n1, float w1, f
     this->t=QDateTime::currentDateTimeUtc();
     this->satDate.setTimeSpec(Qt::UTC);
     this->t.setTimeSpec(Qt::UTC);
-    std::string Year=Epoch.substr(0, 2), aux=Year;
+    std::string Year=Epoch.substr(0, 2), aux=Year;//
     if(stoi(Year)<57){
         Year={};
         Year="20"+aux;
@@ -37,7 +43,46 @@ satellite::satellite(std::string Epoch, float e1, float M, float n1, float w1, f
         Year="19"+aux;
         aux={};
     }
-    std::string Day=Epoch.substr(2, 12), fracDay="0"+Day.substr(Day.find('.'), 12);
+    std::string Day=Epoch.substr(2, 12), fracDay="0"+Day.substr(Day.find('.'), 12);//
+    float hour, minute, sec, msec;
+    hour=24*stof(fracDay);
+    minute=60*(hour-(int)hour);
+    sec=60*(minute-(int)minute);
+    msec=1000*(sec-(int)sec);
+    QDate date;
+    QTime time;
+    date.setDate(stoi(Year), 1, 1);
+    date=date.addDays(stoi(Day)-1);
+    time.setHMS(hour, minute, sec);
+    time=time.addMSecs(msec);
+    this->satDate.setDate(date);
+    this->satDate.setTime(time);
+}
+
+satellite::~satellite(){
+    t.~QDateTime();
+    satDate.~QDateTime();
+}
+
+void satellite::satInit(std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1){
+    this->e=e1; // eccentricity
+    this->M0=M * (M_PI/180); // mean anomaly at epoch
+    this->n=n1 * (M_PI2/d2s); // mean motion (rev/day)
+    this->w=w1 * (M_PI/180); // arg of perigee
+    this->W=W1 * (M_PI/180); // RAAN
+    this->i=i1 * (M_PI/180); // inclination
+    std::string Year=Epoch.substr(0, 2), aux=Year;//
+    if(stoi(Year)<57){
+        Year={};
+        Year="20"+aux;
+        aux={};
+    }
+    else{
+        Year={};
+        Year="19"+aux;
+        aux={};
+    }
+    std::string Day=Epoch.substr(2, 12), fracDay="0"+Day.substr(Day.find('.'), 12);//
     float hour, minute, sec, msec;
     hour=24*stof(fracDay);
     minute=60*(hour-(int)hour);

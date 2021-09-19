@@ -66,14 +66,9 @@ public:
 int main(int argc, char** argv)
 {
     QApplication app(argc,argv);
-    TLEdownload downloader;
-    //std::cout<<Me<<"\n";
-    QTimer::singleShot(0, &downloader, SLOT(execute()));
-    //double PS=6607592.466474319, e2=0.00669437999014, Z=-1609934.5401485646, Ee=6378137.0;
-    //std::cout<<sqrt(pow(pow(PS, 2) + (1 - e2) * pow(Z, 2) * pow(10, 2), 3)) / (Ee * e2)<<"\n";
-    std::vector<TLEdata> satList;
-    fs::path testPath("/home/berceni/build-satMap-Desktop-Debug/");
-    satList=SatSearch(testPath);
+    QList<TLEdata> satList;
+    fs::path Path("./");
+    satList=SatSearch(Path);
     latlong lmao;
 
     std::cout.precision(30);
@@ -87,12 +82,12 @@ int main(int argc, char** argv)
     }
 
     //MyMarbleWidget *mapWidget = new MyMarbleWidget;
-    MainWindow table;
+    MainWindow a;
 
     //mapWidget->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
     //mapWidget->show();
 
-    table.show();
+    a.show();
 
     //Ω
     return app.exec();

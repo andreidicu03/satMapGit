@@ -1,12 +1,13 @@
 #include "TLEParser.h"
 
-vector<TLEdata> SatSearch(fs::path& satPath)
+QList<TLEdata> SatSearch(fs::path& satPath)
 {
-    vector<TLEdata> satelliteList;
+    QList<TLEdata> satelliteList;
     TLEdata satBuf;
     string line1, line2;
     string buf={};
     fs::path iter;
+    int i=0;
     if (fs::exists(satPath) && fs::is_directory(satPath)) //checks if the path is a directory and exists
     {
         for (const auto& entry : fs::directory_iterator(satPath)) //iterates objects in the directory
@@ -37,8 +38,9 @@ vector<TLEdata> SatSearch(fs::path& satPath)
                         satBuf.MeanMotion=stof(line2.substr(52, 11));
 
                         satBuf.origFile=entry.path().filename();
-
+                        satBuf.index=i;
                         satelliteList.push_back(satBuf);
+                        i++;
                         line1={};
                         buf={};
                         line2={};

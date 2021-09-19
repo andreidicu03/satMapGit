@@ -36,8 +36,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 unix {
     LIBS += -L/usr/lib/ \
     -lmarblewidget-qt5
-    INCLUDEPATH += -L/usr/include/marble/
-    DEPENDPATH += -L/usr/include/marble/
+    INCLUDEPATH += /usr/include/marble
+    DEPENDPATH += /usr/include/marble
 }
 
 DISTFILES +=

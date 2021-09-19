@@ -18,6 +18,8 @@
 
 #define M_PI2 M_PI * 2
 
+namespace fs=std::filesystem;
+
 inline const int d2s = 86400;
 inline const double Ee = 6378.137e3; // equatorial radius [m]
 inline const double Pe = 6356.752e3; // polar radius [m]
@@ -41,6 +43,7 @@ struct TLEdata{
     double MeanMotion;
     //file
     std::string origFile;
+    int index;
 };
 
 struct coord{

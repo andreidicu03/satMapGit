@@ -10,29 +10,21 @@ TLEdownload::TLEdownload()
             this, SLOT(downloadFinished(QNetworkReply*)));
 }
 
+void TLEdownload::setURLs(QStringList args){
+    this->URLs=args;
+}
+
 void TLEdownload::execute()
 {
-    // get the argument including program's name
-    QStringList args = QCoreApplication::instance()->arguments();
-
-    // skip the first argument, which is the program's name
-    args.takeFirst();
-
-
-
-    // process each url starting from the 2nd one
-    foreach (QString arg, args) {
-
+     // process each url starting from the 2nd one
+    foreach (QString arg, URLs) {
         // QString::toLocal8Bit()
         //  - local 8-bit representation of the string as a QByteArray
         // Qurl::fromEncoded(QByteArray)
         //  - Parses input and returns the corresponding QUrl.
         //    input is assumed to be in encoded form,
         //    containing only ASCII characters.
-
         QUrl url = QUrl::fromEncoded(arg.toLocal8Bit());
-
-        // makes a request
         doDownload(url);
     }
 }
