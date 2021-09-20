@@ -189,3 +189,16 @@ latlong satellite::ground_track(QDateTime t){
 
     return ret;
 }
+
+void satellite::coutSat(){
+    qDebug()<<"\n\n";
+    qDebug()<<t<<satDate;
+    qDebug()<<a;// semi major axis
+    qDebug()<<e;// eccentricity
+    qDebug()<<E;// Eccentric anomaly
+    qDebug()<<M0;// mean anomaly at epoch
+    qDebug()<<n;// mean motion (rev/day)
+    qDebug()<<w;// arg of perigee
+    qDebug()<<W;// RAAN
+    qDebug()<<i;// inclination
+}

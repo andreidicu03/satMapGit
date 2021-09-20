@@ -26,6 +26,7 @@ private:
     TLEdownload downloader;
     satellite activeSat;
     QString s;
+
     int currentSatIndex;
 
 private slots:

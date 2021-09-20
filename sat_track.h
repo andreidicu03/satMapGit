@@ -25,7 +25,7 @@ public:
     float eccentric_anomaly();
     coord coordinate_transformations();
     latlong ground_track(QDateTime t);
-
+    void coutSat();
 };
 
 #endif // SAT_TRACK_H

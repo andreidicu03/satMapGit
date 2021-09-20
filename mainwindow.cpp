@@ -74,8 +74,14 @@ void MainWindow::on_actionQuit_triggered()
 
 void MainWindow::on_satBox_currentIndexChanged(int index)
 {
-    if(index==ui->satBox->itemData(index)){
-        qDebug()<<"YO\n";
+    satellite newSat;
+    for(TLEdata &i: satList){
+        if(index==i.index){
+            newSat.satInit(i.Epoch, i.Eccentricity, i.MeanAnomaly, i.MeanMotion, i.ArgPerigee, i.RAAN, i.Inclination);
+            break;
+        }
     }
+    activeSat=newSat;
+    //activeSat.coutSat();
 }
 

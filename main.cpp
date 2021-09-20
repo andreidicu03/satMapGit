@@ -64,29 +64,24 @@ public:
 //pt glob se aplica ca la harta
 
 int main(int argc, char** argv)
-{
+{    
     QApplication app(argc,argv);
     QList<TLEdata> satList;
     fs::path Path("./");
     satList=SatSearch(Path);
-    latlong lmao;
+    //latlong lmao;
 
     std::cout.precision(30);
 
-    for(TLEdata& i : satList){
+    /*for(TLEdata& i : satList){
         if(i.CatNo==25544&&i.origFile=="active.txt") {
             satellite ISS(i.Epoch, i.Eccentricity, i.MeanAnomaly, i.MeanMotion, i.ArgPerigee, i.RAAN, i.Inclination);
             lmao=ISS.ground_track(QDateTime::currentDateTimeUtc());
             std::cout<<lmao.lat<<" "<<lmao.lon<<"\n";
         }
-    }
+    }*/
 
-    //MyMarbleWidget *mapWidget = new MyMarbleWidget;
     MainWindow a;
-
-    //mapWidget->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
-    //mapWidget->show();
-
     a.show();
 
     //Ω
