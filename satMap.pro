@@ -2,6 +2,7 @@ QT += core gui
 QT += network
 QT += widgets
 QT += location
+QT += Marble
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

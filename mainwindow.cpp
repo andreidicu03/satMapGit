@@ -85,3 +85,15 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
     //activeSat.coutSat();
 }
 
+
+void MainWindow::on_longitudeEdit_returnPressed()
+{
+
+}
+
+
+void MainWindow::on_latitudeEdit_returnPressed()
+{
+
+}
+

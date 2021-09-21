@@ -35,6 +35,8 @@ private slots:
     void on_actionRefresh_TLEs_triggered();
     void on_actionQuit_triggered();
     void on_satBox_currentIndexChanged(int index);
+    void on_longitudeEdit_returnPressed();
+    void on_latitudeEdit_returnPressed();
 };
 
 #endif // MAINWINDOW_H
