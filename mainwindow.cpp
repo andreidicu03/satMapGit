@@ -11,6 +11,10 @@ MainWindow::MainWindow(QWidget *parent):
     Path="./";
     ui->satLabel->setText("");
     satList=SatSearch(Path);
+    ui->latChoose->addItem("N", 0);
+    ui->latChoose->addItem("S", 1);
+    ui->longChoose->addItem("E", 0);
+    ui->longChoose->addItem("W", 1);
     for(TLEdata &i: satList){
         QString satN=QString::fromStdString(i.SatName);
         ui->satBox->addItem(satN, i.index);
@@ -85,15 +89,32 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
     //activeSat.coutSat();
 }
 
-
-void MainWindow::on_longitudeEdit_returnPressed()
+void MainWindow::on_latSecond_valueChanged(int arg1)
 {
-
+    latSecond=arg1;
 }
 
-
-void MainWindow::on_latitudeEdit_returnPressed()
+void MainWindow::on_latMinute_valueChanged(int arg1)
 {
-
+    latMinute=arg1;
 }
 
+void MainWindow::on_latHour_valueChanged(int arg1)
+{
+    latHour=arg1;
+}
+
+void MainWindow::on_longSecond_valueChanged(int arg1)
+{
+    longSecond=arg1;
+}
+
+void MainWindow::on_longMinute_valueChanged(int arg1)
+{
+    longMinute=arg1;
+}
+
+void MainWindow::on_longHour_valueChanged(int arg1)
+{
+    longHour=arg1;
+}

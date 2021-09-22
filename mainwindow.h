@@ -26,7 +26,9 @@ private:
     TLEdownload downloader;
     satellite activeSat;
     QString s;
-
+    int latHour, latMinute, latSecond;
+    int longHour, longMinute, longSecond;
+    bool latDir, longDir;
     int currentSatIndex;
 
 private slots:
@@ -35,8 +37,12 @@ private slots:
     void on_actionRefresh_TLEs_triggered();
     void on_actionQuit_triggered();
     void on_satBox_currentIndexChanged(int index);
-    void on_longitudeEdit_returnPressed();
-    void on_latitudeEdit_returnPressed();
+    void on_latSecond_valueChanged(int arg1);
+    void on_latMinute_valueChanged(int arg1);
+    void on_latHour_valueChanged(int arg1);
+    void on_longSecond_valueChanged(int arg1);
+    void on_longMinute_valueChanged(int arg1);
+    void on_longHour_valueChanged(int arg1);
 };
 
 #endif // MAINWINDOW_H
