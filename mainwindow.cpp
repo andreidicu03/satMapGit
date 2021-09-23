@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent):
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    latHour=0; latMinute=0; latSecond=0;
+    longHour=0; longMinute=0; longSecond=0;
     Path="./";
     ui->satLabel->setText("");
     satList=SatSearch(Path);
@@ -118,3 +120,9 @@ void MainWindow::on_longHour_valueChanged(int arg1)
 {
     longHour=arg1;
 }
+
+void MainWindow::on_OK_triggered(QAction *arg1)
+{
+
+}
+

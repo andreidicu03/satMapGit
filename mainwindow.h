@@ -43,6 +43,7 @@ private slots:
     void on_longSecond_valueChanged(int arg1);
     void on_longMinute_valueChanged(int arg1);
     void on_longHour_valueChanged(int arg1);
+    void on_OK_triggered(QAction *arg1);
 };
 
 #endif // MAINWINDOW_H
