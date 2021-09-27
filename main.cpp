@@ -73,14 +73,6 @@ int main(int argc, char** argv)
 
     std::cout.precision(30);
 
-    /*for(TLEdata& i : satList){
-        if(i.CatNo==25544&&i.origFile=="active.txt") {
-            satellite ISS(i.Epoch, i.Eccentricity, i.MeanAnomaly, i.MeanMotion, i.ArgPerigee, i.RAAN, i.Inclination);
-            lmao=ISS.ground_track(QDateTime::currentDateTimeUtc());
-            std::cout<<lmao.lat<<" "<<lmao.lon<<"\n";
-        }
-    }*/
-
     MainWindow a;
     a.show();
 

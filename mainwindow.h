@@ -25,6 +25,8 @@ private:
     fs::path Path;
     TLEdownload downloader;
     satellite activeSat;
+    QGraphicsScene scene;
+    QPixmap pixmap;
     QString s;
     int latHour, latMinute, latSecond;
     int longHour, longMinute, longSecond;

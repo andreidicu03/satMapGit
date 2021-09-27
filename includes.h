@@ -5,6 +5,7 @@
 #include <QtCore>
 #include <QString>
 #include <QGeoRoute>
+#include <QGraphicsScene>
 
 #define _USE_MATH_DEFINES
 

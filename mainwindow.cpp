@@ -21,6 +21,10 @@ MainWindow::MainWindow(QWidget *parent):
         QString satN=QString::fromStdString(i.SatName);
         ui->satBox->addItem(satN, i.index);
     }
+    pixmap.load("./2560x1280map.png");
+    scene.addPixmap(pixmap);
+    ui->mapView->setScene(&scene);
+    ui->mapView->show();
 }
 
 MainWindow::~MainWindow()
