@@ -36,7 +36,7 @@
        <enum>QTabWidget::North</enum>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="satPasses">
        <property name="whatsThis">
@@ -344,7 +344,17 @@
         <string>Map</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="1">
+         <widget class="QToolButton" name="mapOK">
+          <property name="text">
+           <string>OK</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
+         <widget class="QComboBox" name="mapSelect"/>
+        </item>
+        <item row="1" column="0" colspan="2">
          <widget class="QGraphicsView" name="mapView"/>
         </item>
        </layout>
@@ -387,7 +397,9 @@
      <string>SatMap</string>
     </property>
     <addaction name="actionUpdate_TLEs"/>
+    <addaction name="actionDownload_map"/>
     <addaction name="actionRefresh_TLEs"/>
+    <addaction name="actionRefresh_Map"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
     <addaction name="actionAbout"/>
@@ -413,6 +425,16 @@
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionDownload_map">
+   <property name="text">
+    <string>Download map</string>
+   </property>
+  </action>
+  <action name="actionRefresh_Map">
+   <property name="text">
+    <string>Refresh Map</string>
    </property>
   </action>
  </widget>

@@ -46,6 +46,8 @@ private slots:
     void on_longMinute_valueChanged(int arg1);
     void on_longHour_valueChanged(int arg1);
     void on_OK_triggered(QAction *arg1);
+    void on_actionDownload_map_triggered();
+    void on_actionRefresh_Map_triggered();
 };
 
 #endif // MAINWINDOW_H

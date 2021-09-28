@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent):
         QString satN=QString::fromStdString(i.SatName);
         ui->satBox->addItem(satN, i.index);
     }
-    pixmap.load("./2560x1280map.png");
+    pixmap.load("./2560px-Large_World_Physical_Map.png");
     scene.addPixmap(pixmap);
     ui->mapView->setScene(&scene);
     ui->mapView->show();
@@ -128,5 +128,37 @@ void MainWindow::on_longHour_valueChanged(int arg1)
 void MainWindow::on_OK_triggered(QAction *arg1)
 {
 
+}
+
+
+void MainWindow::on_actionDownload_map_triggered()
+{
+    bool ok;
+    QString text = QInputDialog::getText(this, tr("QInputDialog::getText()"),
+                                         tr("URL:"), QLineEdit::Normal,
+                                         "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Large_World_Physical_Map.png/2560px-Large_World_Physical_Map.png", &ok);
+    if(ok){
+
+        QStringList URLs;
+        URLs.append(text);
+        downloader.setURLs(URLs);
+        QTimer wait;
+        wait.singleShot(0, &downloader, SLOT(execute()));
+
+    }
+    else{
+        QMessageBox* error = new QMessageBox();
+        error->setText("Download Error");
+        error->exec();
+    }
+}
+
+
+void MainWindow::on_actionRefresh_Map_triggered()
+{
+    pixmap.load("./2560px-Large_World_Physical_Map.png");
+    scene.addPixmap(pixmap);
+    ui->mapView->setScene(&scene);
+    ui->mapView->show();
 }
 
