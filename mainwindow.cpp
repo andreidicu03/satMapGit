@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "fileSearch.h"
 #include <QMessageBox>
 #include <QInputDialog>
 
@@ -21,10 +22,12 @@ MainWindow::MainWindow(QWidget *parent):
         QString satN=QString::fromStdString(i.SatName);
         ui->satBox->addItem(satN, i.index);
     }
-    pixmap.load("./2560px-Large_World_Physical_Map.png");
-    scene.addPixmap(pixmap);
-    ui->mapView->setScene(&scene);
-    ui->mapView->show();
+    mapFiles=fileSearch("./", ".png");
+    ui->mapSelect->clear();
+    for(QString &i : mapFiles)
+    {
+        ui->mapSelect->addItem(i);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -125,12 +128,6 @@ void MainWindow::on_longHour_valueChanged(int arg1)
     longHour=arg1;
 }
 
-void MainWindow::on_OK_triggered(QAction *arg1)
-{
-
-}
-
-
 void MainWindow::on_actionDownload_map_triggered()
 {
     bool ok;
@@ -151,12 +148,19 @@ void MainWindow::on_actionDownload_map_triggered()
         error->setText("Download Error");
         error->exec();
     }
+    mapFiles.clear();
+    mapFiles=fileSearch("./", ".png");
+    ui->mapSelect->clear();
+    for(QString &i : mapFiles)
+    {
+        ui->mapSelect->addItem(i);
+    }
 }
 
-
-void MainWindow::on_actionRefresh_Map_triggered()
+void MainWindow::on_mapOK_clicked()
 {
-    pixmap.load("./2560px-Large_World_Physical_Map.png");
+    pixmap.load(ui->mapSelect->currentText());
+    scene.clear();
     scene.addPixmap(pixmap);
     ui->mapView->setScene(&scene);
     ui->mapView->show();

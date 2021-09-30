@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <includes.h>
 #include <QMainWindow>
+#include "includes.h"
 #include "sat_track.h"
 #include "TLEdownload.h"
 #include "TLEParser.h"
@@ -22,6 +22,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QList<TLEdata> satList;
+    QStringList mapFiles;
     fs::path Path;
     TLEdownload downloader;
     satellite activeSat;
@@ -45,9 +46,8 @@ private slots:
     void on_longSecond_valueChanged(int arg1);
     void on_longMinute_valueChanged(int arg1);
     void on_longHour_valueChanged(int arg1);
-    void on_OK_triggered(QAction *arg1);
     void on_actionDownload_map_triggered();
-    void on_actionRefresh_Map_triggered();
+    void on_mapOK_clicked();
 };
 
 #endif // MAINWINDOW_H

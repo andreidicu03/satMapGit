@@ -22,6 +22,7 @@ SOURCES += \
 HEADERS += \
     TLEParser.h \
     TLEdownload.h \
+    fileSearch.h \
     includes.h \
     mainwindow.h \
     sat_track.h

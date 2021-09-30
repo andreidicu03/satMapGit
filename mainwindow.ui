@@ -36,7 +36,7 @@
        <enum>QTabWidget::North</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="satPasses">
        <property name="whatsThis">
@@ -355,7 +355,11 @@
          <widget class="QComboBox" name="mapSelect"/>
         </item>
         <item row="1" column="0" colspan="2">
-         <widget class="QGraphicsView" name="mapView"/>
+         <widget class="QGraphicsView" name="mapView">
+          <property name="dragMode">
+           <enum>QGraphicsView::ScrollHandDrag</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -399,7 +403,6 @@
     <addaction name="actionUpdate_TLEs"/>
     <addaction name="actionDownload_map"/>
     <addaction name="actionRefresh_TLEs"/>
-    <addaction name="actionRefresh_Map"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
     <addaction name="actionAbout"/>
@@ -430,11 +433,6 @@
   <action name="actionDownload_map">
    <property name="text">
     <string>Download map</string>
-   </property>
-  </action>
-  <action name="actionRefresh_Map">
-   <property name="text">
-    <string>Refresh Map</string>
    </property>
   </action>
  </widget>
