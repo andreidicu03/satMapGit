@@ -21,7 +21,9 @@ satellite::satellite(){
     this->t.setTimeSpec(Qt::UTC);
 };
 
-satellite::satellite(std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1){
+satellite::satellite(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1){
+    this->catalogNr=catNr;
+    this->Name=QString::fromStdString(Name);
     this->e=e1; // eccentricity
     this->M0=M * (M_PI/180); // mean anomaly at epoch
     this->n=n1 * (M_PI2/d2s); // mean motion (rev/day)
@@ -64,7 +66,9 @@ satellite::~satellite(){
     satDate.~QDateTime();
 }
 
-void satellite::satInit(std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1){
+void satellite::satInit(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1){
+    this->catalogNr=catNr;
+    this->Name=QString::fromStdString(Name);
     this->e=e1; // eccentricity
     this->M0=M * (M_PI/180); // mean anomaly at epoch
     this->n=n1 * (M_PI2/d2s); // mean motion (rev/day)
@@ -192,6 +196,8 @@ latlong satellite::ground_track(QDateTime t){
 
 void satellite::coutSat(){
     qDebug()<<"\n\n";
+    qDebug()<<Name;
+    qDebug()<<catalogNr;
     qDebug()<<t<<satDate;
     qDebug()<<a;// semi major axis
     qDebug()<<e;// eccentricity

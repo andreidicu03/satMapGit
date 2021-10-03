@@ -8,45 +8,37 @@ QList<TLEdata> SatSearch(fs::path& satPath)
     string buf={};
     fs::path iter;
     int i=0;
-    if (fs::exists(satPath) && fs::is_directory(satPath)) //checks if the path is a directory and exists
+    if (!fs::is_directory(satPath)) //if the object isn't a directory it tries to open it with fstream
     {
-        for (const auto& entry : fs::directory_iterator(satPath)) //iterates objects in the directory
+        iter = satPath;
+        ifstream f(satPath);
+        while (getline(f, satBuf.SatName))
         {
-            if (!fs::is_directory(entry.path())) //if the object isn't a directory it tries to open it with fstream
-            {
-                if(entry.path().extension()==".txt"){
-                    iter = entry.path();
-                    ifstream f(entry.path());
-                    while (getline(f, satBuf.SatName))
-                    {
-                        getline(f,line1);
-                        getline(f,line2);
+            getline(f,line1);
+            getline(f,line2);
 
-                        //line1
-                        satBuf.IntDesignator=line1.substr(9, 7);
-                        satBuf.Epoch=line1.substr(18, 14);
+            //line1
+            satBuf.IntDesignator=line1.substr(9, 7);
+            satBuf.Epoch=line1.substr(18, 14);
 
-                        //line2
-                        satBuf.CatNo=stoi(line2.substr(2, 5));
-                        satBuf.Inclination=stof(line2.substr(8, 8));
-                        satBuf.RAAN=stof(line2.substr(17, 8));
-                        buf.append("0.");
-                        buf.append(line2.substr(26, 7));
-                        satBuf.Eccentricity=stof(buf);
-                        satBuf.ArgPerigee=stof(line2.substr(34, 8));
-                        satBuf.MeanAnomaly=stof(line2.substr(43, 8));
-                        satBuf.MeanMotion=stof(line2.substr(52, 11));
+            //line2
+            satBuf.CatNo=stoi(line2.substr(2, 5));
+            satBuf.Inclination=stof(line2.substr(8, 8));
+            satBuf.RAAN=stof(line2.substr(17, 8));
+            buf.append("0.");
+            buf.append(line2.substr(26, 7));
+            satBuf.Eccentricity=stof(buf);
+            satBuf.ArgPerigee=stof(line2.substr(34, 8));
+            satBuf.MeanAnomaly=stof(line2.substr(43, 8));
+            satBuf.MeanMotion=stof(line2.substr(52, 11));
 
-                        satBuf.origFile=entry.path().filename();
-                        satBuf.index=i;
-                        satelliteList.push_back(satBuf);
-                        i++;
-                        line1={};
-                        buf={};
-                        line2={};
-                    }
-                }
-            }
+            satBuf.origFile=satPath.filename();
+            satBuf.index=i;
+            satelliteList.push_back(satBuf);
+            i++;
+            line1={};
+            buf={};
+            line2={};
         }
     }
     return satelliteList;

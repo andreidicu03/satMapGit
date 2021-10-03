@@ -14,14 +14,14 @@ CONFIG += c++17
 
 SOURCES += \
     TLEParser.cpp \
-    TLEdownload.cpp \
+    download.cpp \
     main.cpp \
     mainwindow.cpp \
     sat_track.cpp
 
 HEADERS += \
     TLEParser.h \
-    TLEdownload.h \
+    download.h \
     fileSearch.h \
     includes.h \
     mainwindow.h \

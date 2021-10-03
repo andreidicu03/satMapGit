@@ -3,6 +3,16 @@
 
 #include "includes.h"
 
+std::string strLWR(std::string in){
+  std::string res;
+  res=in;
+  std::transform(res.begin(), res.end(), res.begin(),
+      [](unsigned char c){ return std::tolower(c); });
+  return res;
+};
+
+
+
 QStringList fileSearch(QString Path, QString Extension){
     QStringList files;
     QString file;
@@ -12,7 +22,7 @@ QStringList fileSearch(QString Path, QString Extension){
         {
             if (!fs::is_directory(entry.path())) //if the object isn't a directory it tries to open it with fstream
             {
-                if(entry.path().extension()==Extension.toStdString()){
+                if(strLWR(entry.path().extension())==strLWR(Extension.toStdString())){
                     file=QString::fromStdString(entry.path().string());
                     files.append(file);
                     //qDebug()<<file;

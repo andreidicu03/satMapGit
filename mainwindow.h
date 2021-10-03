@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "includes.h"
 #include "sat_track.h"
-#include "TLEdownload.h"
+#include "download.h"
 #include "TLEParser.h"
 
 QT_BEGIN_NAMESPACE
@@ -22,9 +22,9 @@ public:
 private:
     Ui::MainWindow *ui;
     QList<TLEdata> satList;
-    QStringList mapFiles;
-    fs::path Path;
-    TLEdownload downloader;
+    QStringList mapFiles, tleFiles;
+    fs::path mapPath, tlePath, activeTLE;
+    download downloader;
     satellite activeSat;
     QGraphicsScene scene;
     QPixmap pixmap;
@@ -48,6 +48,8 @@ private slots:
     void on_longHour_valueChanged(int arg1);
     void on_actionDownload_map_triggered();
     void on_mapOK_clicked();
+    void on_OK_clicked();
+    void on_tleOK_clicked();
 };
 
 #endif // MAINWINDOW_H

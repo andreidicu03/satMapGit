@@ -1,5 +1,5 @@
-#ifndef TLEDOWNLOAD_H
-#define TLEDOWNLOAD_H
+#ifndef DOWNLOAD_H
+#define DOWNLOAD_H
 
 #include "includes.h"
 #include <QObject>
@@ -24,7 +24,7 @@
 
 class QSslError;
 
-class TLEdownload: public QObject
+class download: public QObject
 {
     Q_OBJECT
     QNetworkAccessManager manager;
@@ -32,10 +32,12 @@ class TLEdownload: public QObject
 
 private:
     QStringList URLs;
+    QString basePath;
 
 public:
-    TLEdownload();
+    download();
     void setURLs(QStringList args);
+    void setPath(QString arg);
     void doDownload(const QUrl &url);
     QString saveFileName(const QUrl &url);
     bool saveToDisk(const QString &filename, QIODevice *data);
@@ -46,4 +48,4 @@ public slots:
     void sslErrors(const QList<QSslError> &errors);
 };
 
-#endif // TLEDOWNLOAD_H
+#endif // DOWNLOAD_H

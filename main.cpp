@@ -7,7 +7,7 @@
 
 #include "mainwindow.h"
 #include "sat_track.h"
-#include "TLEdownload.h"
+#include "download.h"
 #include "TLEParser.h"
 
 #include <QApplication>

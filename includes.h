@@ -55,6 +55,4 @@ struct latlong{
     long double lat, lon;
 };
 
-
-
 #endif // INCLUDES_H

@@ -1,21 +1,25 @@
 #include <QCoreApplication>
 #include <QMessageBox>
 
-#include "TLEdownload.h"
+#include "download.h"
 
 // constructor
-TLEdownload::TLEdownload()
+download::download()
 {
     // signal finish(), calls downloadFinished()
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(downloadFinished(QNetworkReply*)));
 }
 
-void TLEdownload::setURLs(QStringList args){
+void download::setURLs(QStringList args){
     this->URLs=args;
 }
 
-void TLEdownload::execute()
+void download::setPath(QString args){
+    this->basePath=args;
+}
+
+void download::execute()
 {
      // process each url starting from the 2nd one
     foreach (QString arg, URLs) {
@@ -31,7 +35,7 @@ void TLEdownload::execute()
 }
 
 // Constructs a QList of QNetworkReply
-void TLEdownload::doDownload(const QUrl &url)
+void download::doDownload(const QUrl &url)
 {
     QNetworkRequest request(url);
     QNetworkReply *reply = manager.get(request);
@@ -44,9 +48,10 @@ void TLEdownload::doDownload(const QUrl &url)
     currentDownloads.append(reply);
 }
 
-QString TLEdownload::saveFileName(const QUrl &url)
+QString download::saveFileName(const QUrl &url)
 {
     QString path = url.path();
+    QString saveFolder=basePath;
     QString basename = QFileInfo(path).fileName();
 
     if (basename.isEmpty())
@@ -56,10 +61,13 @@ QString TLEdownload::saveFileName(const QUrl &url)
         QFile::remove(basename);
     }
 
-    return basename;
+    saveFolder.append("/");
+    saveFolder.append(basename);
+
+    return saveFolder;
 }
 
-void TLEdownload::downloadFinished(QNetworkReply *reply)
+void download::downloadFinished(QNetworkReply *reply)
 {
     QUrl url = reply->url();
     if (reply->error()) {
@@ -83,7 +91,7 @@ void TLEdownload::downloadFinished(QNetworkReply *reply)
 
 }
 
-bool TLEdownload::saveToDisk(const QString &filename, QIODevice *reply)
+bool download::saveToDisk(const QString &filename, QIODevice *reply)
 {
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
@@ -99,7 +107,7 @@ bool TLEdownload::saveToDisk(const QString &filename, QIODevice *reply)
     return true;
 }
 
-void TLEdownload::sslErrors(const QList<QSslError> &sslErrors)
+void download::sslErrors(const QList<QSslError> &sslErrors)
 {
 #ifndef QT_NO_SSL
     foreach (const QSslError &error, sslErrors)

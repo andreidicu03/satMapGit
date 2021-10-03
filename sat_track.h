@@ -7,6 +7,8 @@
 
 class satellite {
 private:
+    QString Name;
+    int catalogNr;
     QDateTime t, satDate;
     float a;// semi major axis
     float e;// eccentricity
@@ -19,8 +21,8 @@ private:
 public:
     satellite();
     ~satellite();
-    satellite(std::string Epoch, float e, float M0, float n, float w, float W, float i);
-    void satInit(std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1);
+    satellite(std::string Name, int catNr, std::string Epoch, float e, float M0, float n, float w, float W, float i);
+    void satInit(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1);
     long double rotation_angle();
     float eccentric_anomaly();
     coord coordinate_transformations();
