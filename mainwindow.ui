@@ -364,6 +364,7 @@
     <addaction name="actionUpdate_TLEs"/>
     <addaction name="actionDownload_map"/>
     <addaction name="actionRefresh_TLEs"/>
+    <addaction name="actionRefresh_maps"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
     <addaction name="actionAbout"/>
@@ -373,7 +374,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionUpdate_TLEs">
    <property name="text">
-    <string>Update TLEs</string>
+    <string>Download TLEs</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -394,6 +395,11 @@
   <action name="actionDownload_map">
    <property name="text">
     <string>Download map</string>
+   </property>
+  </action>
+  <action name="actionRefresh_maps">
+   <property name="text">
+    <string>Refresh maps</string>
    </property>
   </action>
  </widget>

@@ -50,6 +50,7 @@ private slots:
     void on_mapOK_clicked();
     void on_OK_clicked();
     void on_tleOK_clicked();
+    void on_actionRefresh_maps_triggered();
 };
 
 #endif // MAINWINDOW_H

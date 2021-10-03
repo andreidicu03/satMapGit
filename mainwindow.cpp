@@ -208,3 +208,14 @@ void MainWindow::on_tleOK_clicked()
     }
 }
 
+
+void MainWindow::on_actionRefresh_maps_triggered()
+{
+    mapFiles=fileSearch(QString::fromStdString(mapPath.string()), ".png");
+    ui->mapSelect->clear();
+    for(QString &i : mapFiles)
+    {
+        ui->mapSelect->addItem(i);
+    }
+}
+
