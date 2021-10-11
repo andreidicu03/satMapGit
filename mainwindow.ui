@@ -296,7 +296,36 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-         <widget class="QTableWidget" name="satFreqTable"/>
+         <widget class="QTableWidget" name="satFreqTable">
+          <attribute name="horizontalHeaderCascadingSectionResizes">
+           <bool>false</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Name</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Mode</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Downlink</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Uplink</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Inverted</string>
+           </property>
+          </column>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -354,7 +383,7 @@
      <x>0</x>
      <y>0</y>
      <width>661</width>
-     <height>23</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSatMap">
@@ -363,6 +392,7 @@
     </property>
     <addaction name="actionUpdate_TLEs"/>
     <addaction name="actionDownload_map"/>
+    <addaction name="actionUpdate_Freq"/>
     <addaction name="actionRefresh_TLEs"/>
     <addaction name="actionRefresh_maps"/>
     <addaction name="separator"/>
@@ -400,6 +430,11 @@
   <action name="actionRefresh_maps">
    <property name="text">
     <string>Refresh maps</string>
+   </property>
+  </action>
+  <action name="actionUpdate_Freq">
+   <property name="text">
+    <string>Update Freq</string>
    </property>
   </action>
  </widget>

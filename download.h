@@ -33,6 +33,7 @@ class download: public QObject
 private:
     QStringList URLs;
     QString basePath;
+    QString filename;
 
 public:
     download();
@@ -40,6 +41,7 @@ public:
     void setPath(QString arg);
     void doDownload(const QUrl &url);
     QString saveFileName(const QUrl &url);
+    void saveFileName(QString basename);
     bool saveToDisk(const QString &filename, QIODevice *data);
 
 public slots:

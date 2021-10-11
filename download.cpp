@@ -55,7 +55,7 @@ QString download::saveFileName(const QUrl &url)
     QString basename = QFileInfo(path).fileName();
 
     if (basename.isEmpty())
-        basename = "TLE";
+        basename = "unknown";
 
     if (QFile::exists(basename)) {
         QFile::remove(basename);
@@ -67,6 +67,20 @@ QString download::saveFileName(const QUrl &url)
     return saveFolder;
 }
 
+void download::saveFileName(QString basename)
+{
+    QString saveFolder=basePath;
+
+    if (basename.isEmpty())
+        basename = "unknown";
+
+    if (QFile::exists(basename)) {
+        QFile::remove(basename);
+    }
+
+    filename=basename;
+}
+
 void download::downloadFinished(QNetworkReply *reply)
 {
     QUrl url = reply->url();
@@ -75,7 +89,8 @@ void download::downloadFinished(QNetworkReply *reply)
                 url.toEncoded().constData(),
                 qPrintable(reply->errorString()));
     } else {
-        QString filename = saveFileName(url);
+        if(this->filename.isEmpty())
+            this->filename = saveFileName(url);
         if (saveToDisk(filename, reply)){
             printf("Download of %s succeeded (saved to %s)\n",
                    url.toEncoded().constData(), qPrintable(filename));

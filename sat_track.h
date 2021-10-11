@@ -8,7 +8,6 @@
 class satellite {
 private:
     QString Name;
-    int catalogNr;
     QDateTime t, satDate;
     float a;// semi major axis
     float e;// eccentricity
@@ -19,6 +18,7 @@ private:
     float W;// RAAN
     float i;// inclination
 public:
+    int catalogNr;
     satellite();
     ~satellite();
     satellite(std::string Name, int catNr, std::string Epoch, float e, float M0, float n, float w, float W, float i);

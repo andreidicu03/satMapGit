@@ -6,6 +6,10 @@
 #include <QString>
 #include <QGeoRoute>
 #include <QGraphicsScene>
+#include <QFile>
+#include <QDebug>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #define _USE_MATH_DEFINES
 

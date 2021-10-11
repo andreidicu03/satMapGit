@@ -21,17 +21,23 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    QGraphicsScene scene;
+    QPixmap pixmap;
+
     QList<TLEdata> satList;
+    satellite activeSat;
+
     QStringList mapFiles, tleFiles;
     fs::path mapPath, tlePath, activeTLE;
     download downloader;
-    satellite activeSat;
-    QGraphicsScene scene;
-    QPixmap pixmap;
-    QString s;
+
+    QJsonArray satFrequencies;
+
     int latHour, latMinute, latSecond;
     int longHour, longMinute, longSecond;
     bool latDir, longDir;
+
     int currentSatIndex;
 
 private slots:
@@ -51,6 +57,7 @@ private slots:
     void on_OK_clicked();
     void on_tleOK_clicked();
     void on_actionRefresh_maps_triggered();
+    void on_actionUpdate_Freq_triggered();
 };
 
 #endif // MAINWINDOW_H

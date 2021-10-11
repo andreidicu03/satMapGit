@@ -44,6 +44,17 @@ MainWindow::MainWindow(QWidget *parent):
     {
         ui->mapSelect->addItem(i);
     }
+
+    QFile jsonFile("./freq.json");
+    jsonFile.open(QFile::ReadOnly);
+    QString raw = jsonFile.readAll();
+    jsonFile.close();
+
+    QJsonDocument doc = QJsonDocument::fromJson(raw.toUtf8());
+    satFrequencies=doc.array();
+
+    ui->satFreqTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->satPassesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 MainWindow::~MainWindow()
@@ -193,6 +204,46 @@ void MainWindow::on_mapOK_clicked()
 
 void MainWindow::on_OK_clicked()
 {
+    ui->satFreqTable->setRowCount(0);
+    int k=0;
+    for(int i =0; i<satFrequencies.size(); i++){
+
+        QJsonValue val=satFrequencies.at(i);
+        if(val.toObject().value("norad_cat_id").toInt()==activeSat.catalogNr){
+            ui->satFreqTable->insertRow(k);
+
+            QString Description = val.toObject().value("description").toString();
+            QString Mode = val.toObject().value("mode").toString();
+            double Downlink = val.toObject().value("downlink_low").toDouble()/1000000;
+            double Uplink = val.toObject().value("uplink_low").toDouble()/1000000;
+            bool Inverted = val.toObject().value("invert").toBool();
+
+            QTableWidgetItem *cell;
+
+            cell = new QTableWidgetItem;
+            cell->setText(Description);
+            ui->satFreqTable->setItem(k, 0, cell);
+
+            cell = new QTableWidgetItem;
+            cell->setText(Mode);
+            ui->satFreqTable->setItem(k, 1, cell);
+
+            cell = new QTableWidgetItem;
+            cell->setText(QString::number(Downlink));
+            ui->satFreqTable->setItem(k, 2, cell);
+
+            cell = new QTableWidgetItem;
+            cell->setText(QString::number(Uplink));
+            ui->satFreqTable->setItem(k, 3, cell);
+
+            cell = new QTableWidgetItem;
+            cell->setText(QString::number(Inverted));
+            ui->satFreqTable->setItem(k, 4, cell);
+
+            k++;
+        }
+    }
+    ui->satFreqTable->resizeColumnsToContents();
 
 }
 
@@ -217,5 +268,25 @@ void MainWindow::on_actionRefresh_maps_triggered()
     {
         ui->mapSelect->addItem(i);
     }
+}
+
+
+void MainWindow::on_actionUpdate_Freq_triggered()
+{
+
+    bool ok=true;
+    QString text = "https://db-dev.satnogs.org/api/transmitters/?format=json";
+    if(ok){
+
+        QStringList URLs;
+        URLs.append(text);
+        downloader.setPath("./");
+        downloader.setURLs(URLs);
+        downloader.saveFileName("./freq.json");
+        QTimer wait;
+        wait.singleShot(0, &downloader, SLOT(execute()));
+    }
+
+
 }
 
