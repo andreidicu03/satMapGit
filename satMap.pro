@@ -23,8 +23,11 @@ HEADERS += \
     TLEParser.h \
     download.h \
     fileSearch.h \
+    gcrs2itrs.h \
     includes.h \
     mainwindow.h \
+    nutation_table.h \
+    rotation_matrices.h \
     sat_track.h
 
 FORMS += \

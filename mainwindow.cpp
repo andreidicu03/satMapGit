@@ -53,8 +53,8 @@ MainWindow::MainWindow(QWidget *parent):
     QJsonDocument doc = QJsonDocument::fromJson(raw.toUtf8());
     satFrequencies=doc.array();
 
-    ui->satFreqTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->satPassesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    //ui->satFreqTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    //ui->satPassesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 MainWindow::~MainWindow()
@@ -275,7 +275,7 @@ void MainWindow::on_actionUpdate_Freq_triggered()
 {
 
     bool ok=true;
-    QString text = "https://db-dev.satnogs.org/api/transmitters/?format=json";
+    QString text = "https://db.satnogs.org/api/transmitters/?format=json";
     if(ok){
 
         QStringList URLs;
