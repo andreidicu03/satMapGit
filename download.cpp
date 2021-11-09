@@ -69,7 +69,6 @@ QString download::saveFileName(const QUrl &url)
 
 void download::saveFileName(QString basename)
 {
-    QString saveFolder=basePath;
 
     if (basename.isEmpty())
         basename = "unknown";
@@ -98,6 +97,7 @@ void download::downloadFinished(QNetworkReply *reply)
             filename+=" finished downloading";
             about.setText(filename);
             about.exec();
+            filename.clear();
         }
     }
 

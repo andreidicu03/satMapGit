@@ -15,8 +15,10 @@ CONFIG += c++17
 SOURCES += \
     TLEParser.cpp \
     download.cpp \
+    gcrs2itrs.cpp \
     main.cpp \
     mainwindow.cpp \
+    rotation_matrices.cpp \
     sat_track.cpp
 
 HEADERS += \

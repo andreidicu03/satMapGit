@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    setlocale (LC_ALL,"en_US.utf8");
     ui->setupUi(this);
 
     latHour=0; latMinute=0; latSecond=0;
@@ -130,6 +131,7 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
     }
     activeSat=newSat;
     //activeSat.coutSat();
+    //qDebug()<<activeSat.ECI();
 }
 
 void MainWindow::on_latSecond_valueChanged(int arg1)

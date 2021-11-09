@@ -14,8 +14,9 @@
 #include <QtGui/QKeyEvent>
 #include <QDebug>
 
+#include <locale>
+
 #include <includes.h>
-#include "gcrs2itrs.h"
 
 using namespace Marble;
 
@@ -78,7 +79,6 @@ float TT(QDateTime t){
 
 int main(int argc, char** argv)
 {
-
     QApplication app(argc,argv);
     QList<TLEdata> satList;
     fs::path Path("./");

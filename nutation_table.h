@@ -1,5 +1,5 @@
-//ifndef NUTATION_TABLE_H
-//define NUTATION_TABLE_H
+#ifndef NUTATION_TABLE_H
+#define NUTATION_TABLE_H
 
 inline const double N_Table[][9] =
         {
@@ -112,4 +112,4 @@ inline const double N_Table[][9] =
             {  0,  1,  0,  1,  0,      0.1,      0.0,       0.0,      0.0 }  // 106
         };
 
-//endif // NUTATION_TABLE_H
+#endif // NUTATION_TABLE_H
