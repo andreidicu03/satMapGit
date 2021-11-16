@@ -103,10 +103,6 @@ void satellite::satInit(std::string Name, int catNr, std::string Epoch, float e1
     date=date.addDays(stoi(Day)-1);
     time.setHMS(hour, minute, sec);
     time=time.addMSecs(msec);
-    qDebug()<<std::atof("0.9999");
-    qDebug()<<QString::fromStdString(fracDay);
-    qDebug()<<hour<<minute<<sec<<msec;
-    qDebug()<<time;
     this->satDate.setDate(date);
     this->satDate.setTime(time);
 }
@@ -118,7 +114,7 @@ https://en.wikipedia.org/wiki/Kepler%27s_equation#Numerical_approximation_of_inv
 */
 float satellite::eccentric_anomaly(){
     this->E=0;
-    float M, dt=0;
+    float M=0, dt=0;
     int accuracy;
     auto equation = [](const long double E, const float e, const long double M){
       return M-E + e*sin(E);
@@ -135,7 +131,7 @@ float satellite::eccentric_anomaly(){
     for(int i =0; i<accuracy; i++){
         this->E=this->E-(equation(this->E, e, M)/derivative(this->E, e));
     }
-    qDebug()<<this->E;
+    qDebug()<<M;
     return this->E;
 }
 

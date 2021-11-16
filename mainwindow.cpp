@@ -246,7 +246,8 @@ void MainWindow::on_OK_clicked()
         }
     }
     ui->satFreqTable->resizeColumnsToContents();
-
+    //qDebug()<<activeSat.ECI();
+    activeSat.eccentric_anomaly();
 }
 
 
