@@ -131,7 +131,7 @@ float satellite::eccentric_anomaly(){
     for(int i =0; i<accuracy; i++){
         this->E=this->E-(equation(this->E, e, M)/derivative(this->E, e));
     }
-    qDebug()<<M;
+    qDebug()<<E;
     return this->E;
 }
 
@@ -154,7 +154,20 @@ https://modelica.org/events/modelica2008/Proceedings/sessions/session4d1.pdf
 https://downloads.rene-schwarz.com/download/M001-Keplerian_Orbit_Elements_to_Cartesian_State_Vectors.pdf
 */
 
-QGenericMatrix<1,3,float> satellite::ECI(){
+QGenericMatrix<1,3,float> satellite::ECR(){
+    //obttaining Terrestrial Time
+    QDateTime orig;
+    orig.setTimeSpec(Qt::UTC);
+
+    QDate origDate; origDate.setDate(2000, 1, 1);
+    QTime origTime; origTime.setHMS(12, 0, 0);
+
+    orig.setDate(origDate);
+    orig.setTime(origTime);
+
+    int JD=t.toSecsSinceEpoch()-orig.toSecsSinceEpoch();
+
+    float TT= (JD / 86400) / 36525;
     // calculate the semi-major axis from kepler's 3rd law
     //b = a * np.sqrt( 1 - np.power(e, 2) ) # semi-minor axis
 
@@ -162,7 +175,7 @@ QGenericMatrix<1,3,float> satellite::ECI(){
     float ν = 2 * atan(sqrt((1 + e) / (1 - e)) * tan(eccentric_anomaly() / 2));
     float r = (a * (1 - pow(e, 2))) / (1 + e * cos(ν));
 
-    QGenericMatrix<1,3,float> PQW, ECI;
+    QGenericMatrix<1,3,float> PQW, ECI, ECR;
 
     float val []={(float)cos(ν), (float)sin(ν), 0};
 
@@ -171,8 +184,10 @@ QGenericMatrix<1,3,float> satellite::ECI(){
     PQW = r * c;
 
     ECI = (RotateZ(-Ω) * RotateX(-i) * RotateZ(-ω)) * PQW;
-    //qDebug()<<ν;
-    return PQW;
+
+    ECR = (W() * R(JD, TT) * Q(TT))*ECI;
+    qDebug()<<ECR;
+    return ECR;
 }
 
 void satellite::coutSat(){
