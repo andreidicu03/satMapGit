@@ -8,6 +8,12 @@ MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    UtcTime.setTimeSpec(Qt::UTC);
+
+    QTimer* updateTimer = new QTimer(this);
+    connect(updateTimer, SIGNAL(timeout()), this, SLOT(updateTime()));
+    updateTimer->start();
+
     setlocale (LC_ALL,"en_US.utf8");
     ui->setupUi(this);
 
@@ -61,6 +67,12 @@ MainWindow::MainWindow(QWidget *parent):
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::updateTime()
+{
+    UtcTime=QDateTime::currentDateTimeUtc();
+    activeSat.updateTime(UtcTime);
 }
 
 void MainWindow::on_actionAbout_triggered()
@@ -125,7 +137,7 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
     satellite newSat;
     for(TLEdata &i: satList){
         if(index==i.index){
-            newSat.satInit(i.SatName, i.CatNo, i.Epoch, i.Eccentricity, i.MeanAnomaly, i.MeanMotion, i.ArgPerigee, i.RAAN, i.Inclination);
+            newSat.satInit(i.SatName, i.CatNo, i.Epoch, i.Eccentricity, i.MeanAnomaly, i.MeanMotion, i.ArgPerigee, i.RAAN, i.Inclination, this->UtcTime);
             break;
         }
     }

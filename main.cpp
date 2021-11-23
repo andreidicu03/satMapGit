@@ -64,7 +64,7 @@ public:
 //pt tabel ????
 //pt glob se aplica ca la harta
 
-float JD(QDateTime t){
+/*float JD(QDateTime t){
     QDateTime orig; QDate origDate; QTime origTime;
     origDate.setDate(2000, 1, 1); origTime.setHMS(12, 0, 0); orig.setDate(origDate); orig.setTime(origTime); orig.setTimeSpec(Qt::UTC); //c cros cros tutoral
 
@@ -75,7 +75,7 @@ float TT(QDateTime t){
     float TT = (JD(t)/86400) / 36525;
     return TT;
 }
-
+*/
 
 int main(int argc, char** argv)
 {

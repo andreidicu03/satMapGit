@@ -22,6 +22,8 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    QDateTime UtcTime;
+
     QGraphicsScene scene;
     QPixmap pixmap;
 
@@ -41,6 +43,7 @@ private:
     int currentSatIndex;
 
 private slots:
+    void updateTime();
     void on_actionAbout_triggered();
     void on_actionUpdate_TLEs_triggered();
     void on_actionRefresh_TLEs_triggered();

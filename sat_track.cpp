@@ -21,7 +21,7 @@ satellite::satellite(){
     this->t.setTimeSpec(Qt::UTC);
 };
 
-satellite::satellite(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1){
+satellite::satellite(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime){
     this->catalogNr=catNr;
     this->Name=QString::fromStdString(Name);
     this->e=e1; // eccentricity
@@ -31,9 +31,8 @@ satellite::satellite(std::string Name, int catNr, std::string Epoch, float e1, f
     this->Ω=W1 * (M_PI/180); // RAAN
     this->i=i1 * (M_PI/180); // inclination
     this->a = cbrt( (G * Me) / pow(n, 2) );
-    this->t=QDateTime::currentDateTimeUtc();
+    this->t=devTime;
     this->satDate.setTimeSpec(Qt::UTC);
-    this->t.setTimeSpec(Qt::UTC);
     std::string Year=Epoch.substr(0, 2), aux=Year;//
     if(stoi(Year)<57){
         Year={};
@@ -66,7 +65,7 @@ satellite::~satellite(){
     satDate.~QDateTime();
 }
 
-void satellite::satInit(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1){
+void satellite::satInit(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime){
 
     this->catalogNr=catNr;
     this->Name=QString::fromStdString(Name);
@@ -77,8 +76,8 @@ void satellite::satInit(std::string Name, int catNr, std::string Epoch, float e1
     this->Ω=W1 * (M_PI/180); // RAAN
     this->i=i1 * (M_PI/180); // inclination
     this->a = cbrt( (G * Me) / pow(n, 2) );
-    this->t=QDateTime::currentDateTimeUtc();
-    this->t.setTimeSpec(Qt::UTC);
+    this->t=devTime;
+    this->satDate.setTimeSpec(Qt::UTC);
     std::string Year=Epoch.substr(0, 2), aux=Year;//
     if(stoi(Year)<57){
         Year={};
@@ -115,18 +114,17 @@ https://en.wikipedia.org/wiki/Kepler%27s_equation#Numerical_approximation_of_inv
 float satellite::eccentric_anomaly(){
     this->E=0;
     float M=0, dt=0;
-    int accuracy;
+    int accuracy=10;
+
     auto equation = [](const long double E, const float e, const long double M){
       return M-E + e*sin(E);
     };
     auto derivative = [](const long double E, const float e){
       return e*cos(E)-1;
     };
-
     dt=t.toSecsSinceEpoch()-satDate.toSecsSinceEpoch();
     M=M0 + n * dt;
     this->E=M;
-    accuracy=10;
 
     for(int i =0; i<accuracy; i++){
         this->E=this->E-(equation(this->E, e, M)/derivative(this->E, e));
@@ -166,7 +164,6 @@ QGenericMatrix<1,3,float> satellite::ECR(){
     orig.setTime(origTime);
 
     int JD=t.toSecsSinceEpoch()-orig.toSecsSinceEpoch();
-
     float TT= (JD / 86400) / 36525;
     // calculate the semi-major axis from kepler's 3rd law
     //b = a * np.sqrt( 1 - np.power(e, 2) ) # semi-minor axis
@@ -186,7 +183,7 @@ QGenericMatrix<1,3,float> satellite::ECR(){
     ECI = (RotateZ(-Ω) * RotateX(-i) * RotateZ(-ω)) * PQW;
 
     ECR = (W() * R(JD, TT) * Q(TT))*ECI;
-    qDebug()<<ECR;
+
     return ECR;
 }
 
@@ -203,4 +200,8 @@ void satellite::coutSat(){
     qDebug()<<ω;// arg of perigee
     qDebug()<<Ω;// RAAN
     qDebug()<<i;// inclination
+}
+
+void satellite::updateTime(QDateTime devTime){
+    this->t=devTime;
 }
