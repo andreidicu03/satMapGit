@@ -11,6 +11,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDateTime>
+#include <QSettings>
 
 #define _USE_MATH_DEFINES
 
@@ -66,7 +67,8 @@ struct latlong{
     long double lat, lon;
 };
 
-
+inline latlong homeCoord;
+inline float height;
 /*template <typename T>
 
 T** MatrixMult (T** m1, T** m2){

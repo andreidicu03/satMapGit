@@ -187,6 +187,43 @@ QGenericMatrix<1,3,float> satellite::ECR(){
     return ECR;
 }
 
+/*
+ECI TO LLH (Latitude Longitude Height)
+
+https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates
+"If declination measures elevation from the reference plane instead of inclination from the zenith,
+the arccos above becomes an arcsin, and the cos(dec) and sin(dec) below become switched."
+
+https://en.wikipedia.org/wiki/Geographic_coordinate_conversion#Newton%E2%80%93Raphson_method
+Newton & Raphson Method - https://en.wikipedia.org/wiki/Newton%27s_method
+
+More About Geodetic Transformations:
+https://journals.pan.pl/Content/98324/PDF/art05.pdf
+https://www.mygeodesy.id.au/documents/Transforming%20Cartesian%20Coordinates.pdf
+*/
+
+/*to add ecr2llh*/
+
+/*
+ECR TO ENU
+
+WGS84
+https://gssc.esa.int/navipedia/index.php/Transformations_between_ECEF_and_ENU_coordinates
+*/
+
+latlong satellite::ground_track(){
+    latlong satCoords, radHome;
+
+    QGenericMatrix<1,3,float> ECR=this->ECR();
+
+    radHome.lat=homeCoord.lat*(M_PI/180);
+    radHome.lon=homeCoord.lon*(M_PI/180);
+
+
+
+    return satCoords;
+}
+
 void satellite::coutSat(){
     qDebug()<<"\n\n";
     qDebug()<<Name;

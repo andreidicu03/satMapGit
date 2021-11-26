@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     tlePath="./tle";
     mapPath="./map";
+    conf="./conf.ini";
 
     if(!fs::exists(tlePath)){
         fs::create_directory(tlePath);

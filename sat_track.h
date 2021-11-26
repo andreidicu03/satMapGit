@@ -25,7 +25,7 @@ public:
     float eccentric_anomaly();
     QGenericMatrix<1,3,float> ECR();
     coord coordinate_transformations();
-    latlong ground_track(QDateTime t);
+    latlong ground_track();
     void coutSat();
     void updateTime(QDateTime devTime);
 };

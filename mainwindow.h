@@ -31,7 +31,7 @@ private:
     satellite activeSat;
 
     QStringList mapFiles, tleFiles;
-    fs::path mapPath, tlePath, activeTLE;
+    fs::path mapPath, tlePath, activeTLE, conf;
     download downloader;
 
     QJsonArray satFrequencies;
