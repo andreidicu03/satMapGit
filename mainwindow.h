@@ -36,6 +36,7 @@ private:
 
     QJsonArray satFrequencies;
 
+    latlong radHome;
     int latHour, latMinute, latSecond;
     int longHour, longMinute, longSecond;
     bool latDir, longDir;

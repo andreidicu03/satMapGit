@@ -212,7 +212,7 @@ https://gssc.esa.int/navipedia/index.php/Transformations_between_ECEF_and_ENU_co
 */
 
 latlong satellite::ground_track(){
-    latlong satCoords, radHome;
+    latlong satCoords;
 
     QGenericMatrix<1,3,float> ECR=this->ECR();
 
@@ -220,7 +220,7 @@ latlong satellite::ground_track(){
     radHome.lon=homeCoord.lon*(M_PI/180);
 
 
-
+    std::cout<<satCoords.lat<<" "<<satCoords.lon;
     return satCoords;
 }
 

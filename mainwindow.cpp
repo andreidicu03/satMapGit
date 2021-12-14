@@ -116,7 +116,6 @@ void MainWindow::on_actionUpdate_TLEs_triggered()
     }
 }
 
-
 void MainWindow::on_actionRefresh_TLEs_triggered()
 {
     ui->tleSelect->clear();
@@ -259,8 +258,9 @@ void MainWindow::on_OK_clicked()
         }
     }
     ui->satFreqTable->resizeColumnsToContents();
-    //qDebug()<<activeSat.ECI();
-    activeSat.ECR();
+    radHome.lat=latHour+latMinute/60+latSecond/3600;
+    radHome.lon=longHour+longMinute/60+longSecond/3600;
+    activeSat.ground_track();
 }
 
 
