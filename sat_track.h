@@ -24,9 +24,9 @@ public:
     satellite(std::string Name, int catNr, std::string Epoch, float e, float M0, float n, float w, float W, float i, QDateTime devTime, latlong homeCoords);
     void satInit(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime, latlong homeCoords);
     float eccentric_anomaly();
-    QGenericMatrix<1,3,float> ECR();
-    coord coordinate_transformations();
-    latlong ground_track();
+    QGenericMatrix<1,3,float> ECI();
+    QGenericMatrix<1,3,float> ECEF();
+    latlong ENU();
     void coutSat();
     void updateTime(QDateTime devTime);
     void updateCoord(latlong homeCoord);

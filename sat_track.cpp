@@ -152,8 +152,25 @@ Faster Methods (ECI): (Precalculate Matrices)
 https://modelica.org/events/modelica2008/Proceedings/sessions/session4d1.pdf
 https://downloads.rene-schwarz.com/download/M001-Keplerian_Orbit_Elements_to_Cartesian_State_Vectors.pdf
 */
+QGenericMatrix<1,3,float> satellite::ECI(){
+    // true anomaly [rad] & radius [m]
+    float ν = 2 * atan(sqrt((1 + e) / (1 - e)) * tan(eccentric_anomaly() / 2));
+    float r = (a * (1 - pow(e, 2))) / (1 + e * cos(ν));
 
-QGenericMatrix<1,3,float> satellite::ECR(){
+    QGenericMatrix<1,3,float> PQW, ECI;
+
+    float val []={(float)cos(ν), (float)sin(ν), 0};
+
+    QGenericMatrix<1,3,float> c(val);
+
+    PQW = r * c;
+
+    ECI = (RotateZ(-Ω) * RotateX(-i) * RotateZ(-ω)) * PQW;
+
+    return ECI;
+}
+
+QGenericMatrix<1,3,float> satellite::ECEF(){
     //obttaining Terrestrial Time
     QDateTime orig;
     orig.setTimeSpec(Qt::UTC);
@@ -169,25 +186,14 @@ QGenericMatrix<1,3,float> satellite::ECR(){
     // calculate the semi-major axis from kepler's 3rd law
     //b = a * np.sqrt( 1 - np.power(e, 2) ) # semi-minor axis
 
-    // true anomaly [rad] & radius [m]
-    float ν = 2 * atan(sqrt((1 + e) / (1 - e)) * tan(eccentric_anomaly() / 2));
-    float r = (a * (1 - pow(e, 2))) / (1 + e * cos(ν));
+    QGenericMatrix<1,3,float> ECEF;
 
-    QGenericMatrix<1,3,float> PQW, ECI, ECR;
+    //greenwich apparent (true) sidereal time
+    float Λ = fmod((H(JD) + ΔH(TT)), M_PI2);
 
-    float val []={(float)cos(ν), (float)sin(ν), 0};
+    ECEF = (W() * RotateZ(Λ) * Q(TT)) * ECI();
 
-    QGenericMatrix<1,3,float> c(val);
-
-    PQW = r * c;
-
-    ECI = (RotateZ(-Ω) * RotateX(-i) * RotateZ(-ω)) * PQW;
-
-    ECR = (W() * R(JD, TT) * Q(TT))*ECI;
-
-    qDebug()<<ECR;
-
-    return ECR;
+    return ECEF;
 }
 
 /*
@@ -214,22 +220,22 @@ WGS84
 https://gssc.esa.int/navipedia/index.php/Transformations_between_ECEF_and_ENU_coordinates
 */
 
-latlong satellite::ground_track(){
+latlong satellite::ENU(){
     latlong satCoords, radHome;
 
-    QGenericMatrix<1,3,float> ECR=this->ECR();
+    QGenericMatrix<1,3,float> ECEF=this->ECEF();
 
     radHome.lat=homeCoord.lat*(M_PI/180);
     radHome.lon=homeCoord.lon*(M_PI/180);
     radHome.h=homeCoord.h;
 
-    float N1=Ee/sqrt(1 - e2 * pow(sin(radHome.lat), 2));
+    float N=Ee/sqrt(1 - e2 * pow(sin(radHome.lat), 2));
 
-    float Xr, Yr, Zr;
+    float Xr=0, Yr=0, Zr=0;
 
-    Xr = (N1 + radHome.h) * cos(radHome.lat) * cos(radHome.lon);
-    Yr = (N1 + radHome.h) * cos(radHome.lat) * sin(radHome.lon);
-    Zr = (N1 * (1 - e2) + radHome.h) * sin(radHome.lat);
+    Xr = (N + radHome.h) * cos(radHome.lat) * cos(radHome.lon);
+    Yr = (N + radHome.h) * cos(radHome.lat) * sin(radHome.lon);
+    Zr = (N * (1 - e2) + radHome.h) * sin(radHome.lat);
 
     //ΔX=ECR(0, 0)-Xr;
     //ΔY=ECR(0, 1)-Yr;
@@ -239,13 +245,13 @@ latlong satellite::ground_track(){
     QGenericMatrix<1,3,float> r(val);
 
     QGenericMatrix<1,3,float> Δ;
-    Δ=ECR-r;
+    Δ=ECEF-r;
 
-    QMatrix3x3 RXZ=RotateX(M_PI/2-radHome.lat)*RotateY(M_PI/2+radHome.lon);
+    QMatrix3x3 RXZ=RotateX(M_PI/2-radHome.lat)*RotateZ(M_PI/2+radHome.lon);
     QGenericMatrix<1,3,float> ENU;
     ENU=RXZ*Δ;
 
-    qDebug()<<ENU;
+    //qDebug()<<ENU;
 
     float X, Y, Z;
     X=ENU(0,0);
@@ -254,14 +260,17 @@ latlong satellite::ground_track(){
 
     satCoords.lat=0;
     satCoords.lon=0;
+    satCoords.h=0;
 
-    satCoords.lat=atan(Z/sqrt(pow(X,2)+pow(Y,2)));
-    satCoords.lon=atan2(Y,X);
+    if(X>=0)
+        satCoords.lon=(M_PI / 2) - atan(Y / X);
+    else
+        satCoords.lon=(M_PI / 2) - (atan(Y / X) + M_PI);
+
+    satCoords.lat=atan(Z / sqrt(pow(X, 2) + pow(Y, 2)));
 
     satCoords.lat=satCoords.lat*180/M_PI;
     satCoords.lon=satCoords.lon*180/M_PI;
-
-    qDebug()<<(float)satCoords.lat<<" "<<(float)satCoords.lon;
 
     return satCoords;
 }

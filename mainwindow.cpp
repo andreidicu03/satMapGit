@@ -21,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent):
     longHour=0; longMinute=0; longSecond=0;
     homeCoord.lat=latHour+latMinute/60+latSecond/3600;
     homeCoord.lon=longHour+longMinute/60+longSecond/3600;
+
+    homeCoord.lat=44.43225;
+    homeCoord.lon=26.10626;
     homeCoord.h=95;
 
     tlePath="./tle";
@@ -77,6 +80,7 @@ void MainWindow::updateTime()
 {
     UtcTime=QDateTime::currentDateTimeUtc();
     activeSat.updateTime(UtcTime);
+    QThread::sleep(1);
 }
 
 void MainWindow::on_actionAbout_triggered()
@@ -261,9 +265,9 @@ void MainWindow::on_OK_clicked()
         }
     }
     ui->satFreqTable->resizeColumnsToContents();
-    homeCoord.lat=latHour+latMinute/60+latSecond/3600;
-    homeCoord.lon=longHour+longMinute/60+longSecond/3600;
-    activeSat.ground_track();
+    //homeCoord.lat=latHour+latMinute/60+latSecond/3600;
+    //homeCoord.lon=longHour+longMinute/60+longSecond/3600;
+    activeSat.ENU();
 }
 
 

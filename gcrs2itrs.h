@@ -9,6 +9,6 @@ inline void N(float T, float &ε, float &Δψ, float &Δε);
 inline void P(float T, float &z, float &ϑ, float &ζ);
 inline QMatrix3x3 Q(float T);
 inline QMatrix3x3 W();
-inline QMatrix3x3 R(float JDt, float T);
-
+inline float H(float JDt);
+inline float ΔH (float T);
 #endif // GCRS2ITRS_H

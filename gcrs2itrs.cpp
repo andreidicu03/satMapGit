@@ -80,39 +80,40 @@ inline QMatrix3x3 Q(float T){
 }
 
 inline QMatrix3x3 W(){
-    float X = 0.033/3600 * (M_PI/180);
-    float Y = 0.331/3600 * (M_PI/180);
+    float X = 0.125751/3600 * (M_PI/180);
+    float Y = -0.358457/3600 * (M_PI/180);
 
     QMatrix3x3 W = RotateY(-X) * RotateX(-Y);
 
     return W;
 }
 
-inline QMatrix3x3 R(float JDt, float T){ // T=TT(t1); where t1=QDateTime::currentDateTimeUtc() and t=t1.toSecsSinceEpoch();
-    // dn - days (number) difference [days], ut - (universal) time [s]
-    float D0= floor((JDt - 0.5 * 86400)/86400);
-    float UT1 = fmod(JDt - 0.5 * 86400, 86400); // - 43200: offset for counting days from 0:00 (midnight)
-    float Du = D0 + 0.5; // correct for measurement from 12:00 (noon)
+inline float H(float JDt){
+    float H;
+    int D0, UT1;
+    std::div_t dv = std::div(JDt - 0.5 * 86400, 86400);
+    D0=dv.quot; UT1=dv.rem;
 
-    // tu - julian centuries from du [days]
-    float Tu = Du / 36525;
-    // H0 (gmst0) - greenwich mean sidereal time at midnight [rad]
-    double H0 = ((24110.54841 + Tu * (8640184.812866 + Tu * (0.093104 - Tu * 6.2e-6))) / 240) * (M_PI/180); // / 240: from [s] to [deg]
-    float H = H0 + We * UT1;
+    float Du;
+    Du = D0 + 0.5;
 
-    //equation of equinoxes
-    float ε;
-    float Δψ;
-    float Δε;
+    float Tu;
+    Tu = Du / 36525;
+
+    float H0;
+    H0 = ((24110.54841 + Tu * (8640184.812866 + Tu * (0.093104 - Tu * 6.2e-6))) / 240)* (M_PI/180);
+    H= H0 + We * UT1;
+
+    return H;
+}
+
+inline float ΔH(float T){
+    float ΔH;
+    float ε, Δψ, Δε;
     N(T, ε, Δψ, Δε);
-    float ΔH = Δψ * cos(ε); // ? = np.arctan(np.tan(Δψ) * np.cos(ε + Δε))
+    ΔH = Δψ * cos(ε);
 
-    // true greenwich sidereal time
-    float Λ = fmod((H + ΔH), (2 * M_PI));
-
-    QMatrix3x3 R = RotateZ(Λ);
-
-    return R;
+    return ΔH;
 }
 
 #endif
