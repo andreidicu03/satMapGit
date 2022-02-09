@@ -12,6 +12,7 @@
 #include <QJsonObject>
 #include <QDateTime>
 #include <QSettings>
+#include <QThread>
 
 #define _USE_MATH_DEFINES
 
@@ -64,7 +65,7 @@ struct coord{
 };
 
 struct latlong{
-    long double lat, lon;
+    long double lat, lon, h;
 };
 
 inline latlong homeCoord;

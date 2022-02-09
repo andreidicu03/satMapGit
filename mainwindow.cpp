@@ -19,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent):
 
     latHour=0; latMinute=0; latSecond=0;
     longHour=0; longMinute=0; longSecond=0;
+    homeCoord.lat=latHour+latMinute/60+latSecond/3600;
+    homeCoord.lon=longHour+longMinute/60+longSecond/3600;
+    homeCoord.h=95;
 
     tlePath="./tle";
     mapPath="./map";
@@ -137,7 +140,7 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
     satellite newSat;
     for(TLEdata &i: satList){
         if(index==i.index){
-            newSat.satInit(i.SatName, i.CatNo, i.Epoch, i.Eccentricity, i.MeanAnomaly, i.MeanMotion, i.ArgPerigee, i.RAAN, i.Inclination, this->UtcTime);
+            newSat.satInit(i.SatName, i.CatNo, i.Epoch, i.Eccentricity, i.MeanAnomaly, i.MeanMotion, i.ArgPerigee, i.RAAN, i.Inclination, this->UtcTime, homeCoord);
             break;
         }
     }
@@ -258,8 +261,8 @@ void MainWindow::on_OK_clicked()
         }
     }
     ui->satFreqTable->resizeColumnsToContents();
-    radHome.lat=latHour+latMinute/60+latSecond/3600;
-    radHome.lon=longHour+longMinute/60+longSecond/3600;
+    homeCoord.lat=latHour+latMinute/60+latSecond/3600;
+    homeCoord.lon=longHour+longMinute/60+longSecond/3600;
     activeSat.ground_track();
 }
 

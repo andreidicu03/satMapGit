@@ -21,7 +21,8 @@ satellite::satellite(){
     this->t.setTimeSpec(Qt::UTC);
 };
 
-satellite::satellite(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime){
+satellite::satellite(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime, latlong homeCoord){
+    this->homeCoord=homeCoord;
     this->catalogNr=catNr;
     this->Name=QString::fromStdString(Name);
     this->e=e1; // eccentricity
@@ -65,8 +66,8 @@ satellite::~satellite(){
     satDate.~QDateTime();
 }
 
-void satellite::satInit(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime){
-
+void satellite::satInit(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime, latlong homeCoord){
+    this->homeCoord=homeCoord;
     this->catalogNr=catNr;
     this->Name=QString::fromStdString(Name);
     this->e=e1; // eccentricity
@@ -129,7 +130,7 @@ float satellite::eccentric_anomaly(){
     for(int i =0; i<accuracy; i++){
         this->E=this->E-(equation(this->E, e, M)/derivative(this->E, e));
     }
-    qDebug()<<E;
+
     return this->E;
 }
 
@@ -184,6 +185,8 @@ QGenericMatrix<1,3,float> satellite::ECR(){
 
     ECR = (W() * R(JD, TT) * Q(TT))*ECI;
 
+    qDebug()<<ECR;
+
     return ECR;
 }
 
@@ -212,15 +215,54 @@ https://gssc.esa.int/navipedia/index.php/Transformations_between_ECEF_and_ENU_co
 */
 
 latlong satellite::ground_track(){
-    latlong satCoords;
+    latlong satCoords, radHome;
 
     QGenericMatrix<1,3,float> ECR=this->ECR();
 
     radHome.lat=homeCoord.lat*(M_PI/180);
     radHome.lon=homeCoord.lon*(M_PI/180);
+    radHome.h=homeCoord.h;
 
+    float N1=Ee/sqrt(1 - e2 * pow(sin(radHome.lat), 2));
 
-    std::cout<<satCoords.lat<<" "<<satCoords.lon;
+    float Xr, Yr, Zr;
+
+    Xr = (N1 + radHome.h) * cos(radHome.lat) * cos(radHome.lon);
+    Yr = (N1 + radHome.h) * cos(radHome.lat) * sin(radHome.lon);
+    Zr = (N1 * (1 - e2) + radHome.h) * sin(radHome.lat);
+
+    //ΔX=ECR(0, 0)-Xr;
+    //ΔY=ECR(0, 1)-Yr;
+    //ΔZ=ECR(0, 2)-Zr;
+    float val []={ Xr, Yr, Zr};
+
+    QGenericMatrix<1,3,float> r(val);
+
+    QGenericMatrix<1,3,float> Δ;
+    Δ=ECR-r;
+
+    QMatrix3x3 RXZ=RotateX(M_PI/2-radHome.lat)*RotateY(M_PI/2+radHome.lon);
+    QGenericMatrix<1,3,float> ENU;
+    ENU=RXZ*Δ;
+
+    qDebug()<<ENU;
+
+    float X, Y, Z;
+    X=ENU(0,0);
+    Y=ENU(1,0);
+    Z=ENU(2,0);
+
+    satCoords.lat=0;
+    satCoords.lon=0;
+
+    satCoords.lat=atan(Z/sqrt(pow(X,2)+pow(Y,2)));
+    satCoords.lon=atan2(Y,X);
+
+    satCoords.lat=satCoords.lat*180/M_PI;
+    satCoords.lon=satCoords.lon*180/M_PI;
+
+    qDebug()<<(float)satCoords.lat<<" "<<(float)satCoords.lon;
+
     return satCoords;
 }
 
@@ -241,4 +283,8 @@ void satellite::coutSat(){
 
 void satellite::updateTime(QDateTime devTime){
     this->t=devTime;
+}
+
+void satellite::updateCoord(latlong homeCoord){
+    this->homeCoord=homeCoord;
 }
