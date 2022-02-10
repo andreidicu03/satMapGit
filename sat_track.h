@@ -26,6 +26,7 @@ public:
     float eccentric_anomaly();
     QGenericMatrix<1,3,float> ECI();
     QGenericMatrix<1,3,float> ECEF();
+    latlong LLH();
     latlong ENU();
     void coutSat();
     void updateTime(QDateTime devTime);

@@ -80,7 +80,7 @@ void MainWindow::updateTime()
 {
     UtcTime=QDateTime::currentDateTimeUtc();
     activeSat.updateTime(UtcTime);
-    QThread::sleep(1);
+    QThread::msleep(50);
 }
 
 void MainWindow::on_actionAbout_triggered()
@@ -267,6 +267,7 @@ void MainWindow::on_OK_clicked()
     ui->satFreqTable->resizeColumnsToContents();
     //homeCoord.lat=latHour+latMinute/60+latSecond/3600;
     //homeCoord.lon=longHour+longMinute/60+longSecond/3600;
+    activeSat.LLH();
     activeSat.ENU();
 }
 

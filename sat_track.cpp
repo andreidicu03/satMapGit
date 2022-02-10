@@ -211,7 +211,52 @@ https://journals.pan.pl/Content/98324/PDF/art05.pdf
 https://www.mygeodesy.id.au/documents/Transforming%20Cartesian%20Coordinates.pdf
 */
 
-/*to add ecr2llh*/
+latlong satellite::LLH(){
+    latlong satPos;
+
+    QGenericMatrix<1,3,float> ECEF=this->ECEF();
+
+    float X, Y, Z;
+    X=ECEF(0,0);
+    Y=ECEF(1,0);
+    Z=ECEF(2,0);
+
+    float p = sqrt(pow(X, 2) + pow(Y, 2));
+    float δ = atan2(Z, p); // declination ~ geocentric latitude (MAX ± 0.01°)
+
+    //compute the geodetic latitude using bowring's method & newthon-raphson iteration method
+
+    auto c = [](const long double K, const float p, const float Z){
+      return pow(p,2) + (1 - e2) * pow(Z, 2) + pow(K, 2);
+    };
+    auto equation = [&c](const long double K, const float p, const float Z){
+      return K - 1 - ((e2*Ee*K)/sqrt(c(K, p ,Z)));
+    };
+    auto derivative = [&c](const long double K, const float p, const float Z){
+      return (sqrt(pow(c(K, p, Z), 3)) - e2 * Ee * pow(p, 2))/sqrt(pow(c(K, p, Z), 3));
+    };
+
+    float ϕ = atan(tan(δ) * (pow(Ee, 2)/pow(Pe, 2)));
+
+    float K0 = tan(ϕ) * (p/Z);
+    float K=K0;
+
+    for (int i=0; i<10; i++){
+        K=K-(equation(K, p, Z)/derivative(K, p, Z));
+    }
+
+    satPos.lat=atan(K*(Z/p));
+    satPos.lon=atan2(Y,X);
+    satPos.h=(1/e2)*((1/K)-(1/K0))*sqrt(pow(p, 2)+pow(Z,2)*pow(K,2));
+
+    satPos.lat=satPos.lat*180/M_PI;
+    satPos.lon=satPos.lon*180/M_PI;
+    satPos.h=satPos.h/1000;
+
+    std::cout<<satPos.lat<<" "<<satPos.lon<<" "<<satPos.h;
+
+    return satPos;
+}
 
 /*
 ECR TO ENU
