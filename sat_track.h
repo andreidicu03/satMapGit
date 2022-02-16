@@ -29,6 +29,8 @@ public:
     latlong LLH();
     latlong ENU();
     void coutSat();
+    QStringList passPredict(int hours);
+    QVector<coord> satTrail(int hours, int accuracy);
     void updateTime(QDateTime devTime);
     void updateCoord(latlong homeCoord);
 };

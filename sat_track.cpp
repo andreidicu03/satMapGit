@@ -253,8 +253,6 @@ latlong satellite::LLH(){
     satPos.lon=satPos.lon*180/M_PI;
     satPos.h=satPos.h/1000;
 
-    std::cout<<satPos.lat<<" "<<satPos.lon<<" "<<satPos.h;
-
     return satPos;
 }
 
@@ -285,7 +283,7 @@ latlong satellite::ENU(){
     //ΔX=ECR(0, 0)-Xr;
     //ΔY=ECR(0, 1)-Yr;
     //ΔZ=ECR(0, 2)-Zr;
-    float val []={ Xr, Yr, Zr};
+    float val []={Xr, Yr, Zr};
 
     QGenericMatrix<1,3,float> r(val);
 
@@ -333,6 +331,35 @@ void satellite::coutSat(){
     qDebug()<<ω;// arg of perigee
     qDebug()<<Ω;// RAAN
     qDebug()<<i;// inclination
+}
+
+QStringList satellite::passPredict(int hours){
+    QStringList passList;
+    QString pass;
+
+    QDateTime finish_Prediction=QDateTime::fromSecsSinceEpoch(this->t.toSecsSinceEpoch()+hours*3600);
+
+    latlong currentAzEl;
+    int passCount=0;
+
+    bool hasPassStarted=false;
+
+    for(int i=t.toSecsSinceEpoch(); i<finish_Prediction.toSecsSinceEpoch(); i=i+10){
+        t=QDateTime::fromSecsSinceEpoch(i);
+        currentAzEl=this->ENU();
+        while(currentAzEl.lat>0){
+            currentAzEl=this->ENU();
+            //pass=QString::number(passCount)+":"+
+            i=i+10;
+        }
+
+        hasPassStarted=false;
+    }
+    return passList;
+}
+
+QVector<coord> satellite::satTrail(int hours, int accuracy){
+
 }
 
 void satellite::updateTime(QDateTime devTime){

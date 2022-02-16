@@ -65,7 +65,7 @@ struct coord{
 };
 
 struct latlong{
-    long double lat, lon, h;
+    long double lat, lon, h; //when in use in function ENU() lon=Azimuth, lat=Elevation
 };
 
 inline latlong homeCoord;

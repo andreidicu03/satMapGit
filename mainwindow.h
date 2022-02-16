@@ -31,7 +31,7 @@ private:
     satellite activeSat;
 
     QStringList mapFiles, tleFiles;
-    fs::path mapPath, tlePath, activeTLE, conf;
+    fs::path mapPath, tlePath, activeTLE;
     download downloader;
 
     QJsonArray satFrequencies;
@@ -44,6 +44,8 @@ private:
     int currentSatIndex;
 
 private slots:
+    void writeSettings();
+    void readSettings();
     void updateTime();
     void on_actionAbout_triggered();
     void on_actionUpdate_TLEs_triggered();

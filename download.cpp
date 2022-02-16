@@ -93,10 +93,10 @@ void download::downloadFinished(QNetworkReply *reply)
         if (saveToDisk(filename, reply)){
             printf("Download of %s succeeded (saved to %s)\n",
                    url.toEncoded().constData(), qPrintable(filename));
-            QMessageBox about;
-            filename+=" finished downloading";
-            about.setText(filename);
-            about.exec();
+            //QMessageBox about;
+            //filename+=" finished downloading";
+            //about.setText(filename);
+            //about.exec();
             filename.clear();
         }
     }

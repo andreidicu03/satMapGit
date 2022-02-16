@@ -22,13 +22,8 @@ MainWindow::MainWindow(QWidget *parent):
     homeCoord.lat=latHour+latMinute/60+latSecond/3600;
     homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 
-    homeCoord.lat=44.43225;
-    homeCoord.lon=26.10626;
-    homeCoord.h=95;
-
     tlePath="./tle";
     mapPath="./map";
-    conf="./conf.ini";
 
     if(!fs::exists(tlePath)){
         fs::create_directory(tlePath);
@@ -37,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent):
     if(!fs::exists(mapPath)){
         fs::create_directory(mapPath);
     }
+
+    this->readSettings();
 
     activeTLE="";
 
@@ -76,10 +73,98 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::writeSettings(){
+    QSettings settings("Barbatboss03", "satMap");
+
+    settings.beginGroup("mainwindow");
+    settings.setValue("homeCoordlat", QVariant::fromValue((double)homeCoord.lat));
+    settings.setValue("homeCoordlon", QVariant::fromValue((double)homeCoord.lon));
+    settings.setValue("homeCoordh", QVariant::fromValue((double)homeCoord.h));
+    QString links = ui->links->toPlainText();
+    QStringList linkList = links.split(QRegExp("[\n]"), QString::SkipEmptyParts);
+
+    settings.beginGroup("links");
+
+    int TLEcount=0, MAPcount=0;
+
+    for (QString link : linkList){
+        QString key = link.section(':', 1, 1);
+        QString value = link.section(':', 1, 1);
+        settings.setValue(key, value);
+        if(key.contains("TLE")) TLEcount++;
+        if(key.contains("MAP")) MAPcount++;
+    }
+
+    settings.setValue("tleLinkCount", QVariant::fromValue(TLEcount));
+    settings.setValue("mapLinkCount", QVariant::fromValue(MAPcount));
+
+    qDebug()<<"gg write";
+}
+
+void MainWindow::readSettings(){
+    QSettings settings("Barbatboss03", "satMap");
+
+    settings.beginGroup("mainwindow");
+    homeCoord.lat=settings.value("homeCoordlat").toDouble();
+    homeCoord.lon=settings.value("homeCoordlon").toDouble();
+    homeCoord.h=settings.value("homeCoordh").toDouble();
+
+    int TLEcount=0, MAPcount=0;
+
+    TLEcount=settings.value("tleLinkCount").toInt();
+    MAPcount=settings.value("mapLinkCount").toInt();
+
+    QStringList outLinks, tleDownLinks, mapDownLinks;
+
+    for(int i=0; i<TLEcount; i++){
+        QString key="TLE", value;
+        key.append(QString::number(i));
+        value=settings.value(key).toString();
+        outLinks.append(key+":"+value);
+        tleDownLinks.append(value);
+    }
+    for(int i=0; i<MAPcount; i++){
+        QString key="MAP", value;
+        key.append(QString::number(i));
+        value=settings.value(key).toString();
+        outLinks.append(key+":"+value);
+        mapDownLinks.append(value);
+    }
+    QTimer wait;
+
+    QString text=outLinks.join("\n");
+
+    ui->links->setText(text);
+
+    downloader.setPath(QString::fromStdString(tlePath.string()));
+    downloader.setURLs(tleDownLinks);
+    wait.singleShot(0, &downloader, SLOT(execute()));
+
+    downloader.setPath(QString::fromStdString(mapPath.string()));
+    downloader.setURLs(mapDownLinks);
+    wait.singleShot(0, &downloader, SLOT(execute()));
+
+    qDebug()<<"gg read";
+
+}
+
 void MainWindow::updateTime()
-{
+{    
     UtcTime=QDateTime::currentDateTimeUtc();
     activeSat.updateTime(UtcTime);
+
+    latlong LLH=activeSat.LLH();
+    latlong ENU=activeSat.ENU();
+
+    QString llhOUT="lat: " + QString::number(LLH.lat, 'g', 4) + "° lon: " + QString::number(LLH.lon, 'g', 4)
+            + "° h:" + QString::number(LLH.h, 'g', 4) + "km";
+
+    ui->coordLabel->setText(llhOUT);
+
+    QString enuOUT="az: " + QString::number(ENU.lon, 'g', 4) + "° el: " + QString::number(ENU.lat, 'g', 4)+ "°";
+
+    ui->azElLabel->setText(enuOUT);
+
     QThread::msleep(50);
 }
 
@@ -149,6 +234,49 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
         }
     }
     activeSat=newSat;
+    ui->satFreqTable->setRowCount(0);
+    int k=0;
+    for(int i =0; i<satFrequencies.size(); i++){
+
+        QJsonValue val=satFrequencies.at(i);
+        if(val.toObject().value("norad_cat_id").toInt()==activeSat.catalogNr){
+            ui->satFreqTable->insertRow(k);
+
+            QString Description = val.toObject().value("description").toString();
+            QString Mode = val.toObject().value("mode").toString();
+            double Downlink = val.toObject().value("downlink_low").toDouble()/1000000;
+            double Uplink = val.toObject().value("uplink_low").toDouble()/1000000;
+            bool Inverted = val.toObject().value("invert").toBool();
+
+            QTableWidgetItem *cell;
+
+            cell = new QTableWidgetItem;
+            cell->setText(Description);
+            ui->satFreqTable->setItem(k, 0, cell);
+
+            cell = new QTableWidgetItem;
+            cell->setText(Mode);
+            ui->satFreqTable->setItem(k, 1, cell);
+
+            cell = new QTableWidgetItem;
+            cell->setText(QString::number(Downlink));
+            ui->satFreqTable->setItem(k, 2, cell);
+
+            cell = new QTableWidgetItem;
+            cell->setText(QString::number(Uplink));
+            ui->satFreqTable->setItem(k, 3, cell);
+
+            cell = new QTableWidgetItem;
+            cell->setText(QString::number(Inverted));
+            ui->satFreqTable->setItem(k, 4, cell);
+
+            k++;
+        }
+    }
+    ui->satFreqTable->resizeColumnsToContents();
+    //homeCoord.lat=latHour+latMinute/60+latSecond/3600;
+    //homeCoord.lon=longHour+longMinute/60+longSecond/3600;
+
     //activeSat.coutSat();
     //qDebug()<<activeSat.ECI();
 }
@@ -156,31 +284,43 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
 void MainWindow::on_latSecond_valueChanged(int arg1)
 {
     latSecond=arg1;
+    homeCoord.lat=latHour+latMinute/60+latSecond/3600;
+    homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 }
 
 void MainWindow::on_latMinute_valueChanged(int arg1)
 {
     latMinute=arg1;
+    homeCoord.lat=latHour+latMinute/60+latSecond/3600;
+    homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 }
 
 void MainWindow::on_latHour_valueChanged(int arg1)
 {
     latHour=arg1;
+    homeCoord.lat=latHour+latMinute/60+latSecond/3600;
+    homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 }
 
 void MainWindow::on_longSecond_valueChanged(int arg1)
 {
     longSecond=arg1;
+    homeCoord.lat=latHour+latMinute/60+latSecond/3600;
+    homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 }
 
 void MainWindow::on_longMinute_valueChanged(int arg1)
 {
     longMinute=arg1;
+    homeCoord.lat=latHour+latMinute/60+latSecond/3600;
+    homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 }
 
 void MainWindow::on_longHour_valueChanged(int arg1)
 {
     longHour=arg1;
+    homeCoord.lat=latHour+latMinute/60+latSecond/3600;
+    homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 }
 
 void MainWindow::on_actionDownload_map_triggered()
@@ -225,50 +365,7 @@ void MainWindow::on_mapOK_clicked()
 
 void MainWindow::on_OK_clicked()
 {
-    ui->satFreqTable->setRowCount(0);
-    int k=0;
-    for(int i =0; i<satFrequencies.size(); i++){
-
-        QJsonValue val=satFrequencies.at(i);
-        if(val.toObject().value("norad_cat_id").toInt()==activeSat.catalogNr){
-            ui->satFreqTable->insertRow(k);
-
-            QString Description = val.toObject().value("description").toString();
-            QString Mode = val.toObject().value("mode").toString();
-            double Downlink = val.toObject().value("downlink_low").toDouble()/1000000;
-            double Uplink = val.toObject().value("uplink_low").toDouble()/1000000;
-            bool Inverted = val.toObject().value("invert").toBool();
-
-            QTableWidgetItem *cell;
-
-            cell = new QTableWidgetItem;
-            cell->setText(Description);
-            ui->satFreqTable->setItem(k, 0, cell);
-
-            cell = new QTableWidgetItem;
-            cell->setText(Mode);
-            ui->satFreqTable->setItem(k, 1, cell);
-
-            cell = new QTableWidgetItem;
-            cell->setText(QString::number(Downlink));
-            ui->satFreqTable->setItem(k, 2, cell);
-
-            cell = new QTableWidgetItem;
-            cell->setText(QString::number(Uplink));
-            ui->satFreqTable->setItem(k, 3, cell);
-
-            cell = new QTableWidgetItem;
-            cell->setText(QString::number(Inverted));
-            ui->satFreqTable->setItem(k, 4, cell);
-
-            k++;
-        }
-    }
-    ui->satFreqTable->resizeColumnsToContents();
-    //homeCoord.lat=latHour+latMinute/60+latSecond/3600;
-    //homeCoord.lon=longHour+longMinute/60+longSecond/3600;
-    activeSat.LLH();
-    activeSat.ENU();
+    this->writeSettings();
 }
 
 
