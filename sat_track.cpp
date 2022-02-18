@@ -343,17 +343,36 @@ QStringList satellite::passPredict(int hours){
     int passCount=0;
 
     bool hasPassStarted=false;
+    long double startAz, endAz, maxElev=0;
+    int start, finish, duration;
 
     for(int i=t.toSecsSinceEpoch(); i<finish_Prediction.toSecsSinceEpoch(); i=i+10){
         t=QDateTime::fromSecsSinceEpoch(i);
         currentAzEl=this->ENU();
+        maxElev=0;
         while(currentAzEl.lat>0){
+            if(!hasPassStarted)
+            {
+                startAz=currentAzEl.lon;
+                start=i;
+                hasPassStarted=true;
+            }
+            if(maxElev<currentAzEl.lat)
+                maxElev=currentAzEl.lat;
             currentAzEl=this->ENU();
-            //pass=QString::number(passCount)+":"+
             i=i+10;
         }
+        if(hasPassStarted){
+            endAz=currentAzEl.lon;
+            finish=i;
+            duration=finish-start;
+            pass=QString::number(passCount)+":"+QString::number((double)startAz)+":"+QString::number((double)maxElev)
+                    +":"+QString::number((double)endAz)+":"+QString::number(duration);
+            qDebug()<<pass;
+            passList.append(pass);
+            hasPassStarted=false;
+        }
 
-        hasPassStarted=false;
     }
     return passList;
 }

@@ -22,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent):
     homeCoord.lat=latHour+latMinute/60+latSecond/3600;
     homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 
+    homeCoord.lat=44.4268;
+    homeCoord.lon=26.1025;
+    homeCoord.h=90;
+
     tlePath="./tle";
     mapPath="./map";
 
@@ -33,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent):
         fs::create_directory(mapPath);
     }
 
-    this->readSettings();
+    //this->readSettings();
 
     activeTLE="";
 
@@ -155,7 +159,7 @@ void MainWindow::updateTime()
 
     latlong LLH=activeSat.LLH();
     latlong ENU=activeSat.ENU();
-
+    qDebug()<<(double)ENU.lat<<" "<<(double)ENU.lon;
     QString llhOUT="lat: " + QString::number(LLH.lat, 'g', 4) + "° lon: " + QString::number(LLH.lon, 'g', 4)
             + "° h:" + QString::number(LLH.h, 'g', 4) + "km";
 
@@ -278,7 +282,7 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
     //homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 
     //activeSat.coutSat();
-    //qDebug()<<activeSat.ECI();
+    qDebug()<<(double)activeSat.ENU().lat<<" "<<(double)activeSat.ENU().lon;
 }
 
 void MainWindow::on_latSecond_valueChanged(int arg1)
