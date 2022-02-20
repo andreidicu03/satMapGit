@@ -68,6 +68,10 @@ MainWindow::MainWindow(QWidget *parent):
     QJsonDocument doc = QJsonDocument::fromJson(raw.toUtf8());
     satFrequencies=doc.array();
 
+    QSettings settings("Barbatboss03", "satMap");
+
+    for(int i=0; i<settings.allKeys().size(); i++) qDebug()<<settings.value(settings.allKeys()[i]);
+
     //ui->satFreqTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     //ui->satPassesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
@@ -80,12 +84,16 @@ MainWindow::~MainWindow()
 void MainWindow::writeSettings(){
     QSettings settings("Barbatboss03", "satMap");
 
+    settings.clear();
+
     settings.beginGroup("mainwindow");
-    settings.setValue("homeCoordlat", QVariant::fromValue((double)homeCoord.lat));
-    settings.setValue("homeCoordlon", QVariant::fromValue((double)homeCoord.lon));
-    settings.setValue("homeCoordh", QVariant::fromValue((double)homeCoord.h));
+    settings.setValue("homeCoordlat", QVariant::fromValue(QString::number((double)homeCoord.lat)));
+    settings.setValue("homeCoordlon", QVariant::fromValue(QString::number((double)homeCoord.lon)));
+    settings.setValue("homeCoordh", QVariant::fromValue(QString::number((double)homeCoord.h)));
     QString links = ui->links->toPlainText();
     QStringList linkList = links.split(QRegExp("[\n]"), QString::SkipEmptyParts);
+
+    qDebug()<<links;
 
     settings.beginGroup("links");
 
@@ -159,7 +167,7 @@ void MainWindow::updateTime()
 
     latlong LLH=activeSat.LLH();
     latlong ENU=activeSat.ENU();
-    qDebug()<<(double)ENU.lat<<" "<<(double)ENU.lon;
+    //qDebug()<<(double)ENU.lat<<" "<<(double)ENU.lon;
     QString llhOUT="lat: " + QString::number(LLH.lat, 'g', 4) + "° lon: " + QString::number(LLH.lon, 'g', 4)
             + "° h:" + QString::number(LLH.h, 'g', 4) + "km";
 
@@ -278,11 +286,54 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
         }
     }
     ui->satFreqTable->resizeColumnsToContents();
+
+    QStringList satPasses=activeSat.passPredict(24, 10);
+
+    ui->satPassesTable->setRowCount(0);
+
+    for(int i =0; i<satPasses.size(); i++){
+        ui->satPassesTable->insertRow(i);
+
+        QString currentPass=satPasses[i];
+        QStringList properties= currentPass.split(";", QString::SkipEmptyParts);
+
+        QTableWidgetItem *cell;
+
+        cell = new QTableWidgetItem;
+        cell->setText(properties[0]); //id
+        ui->satPassesTable->setItem(i, 0, cell);
+
+        cell = new QTableWidgetItem;
+        cell->setText(properties[1]); //startTime
+        ui->satPassesTable->setItem(i, 1, cell);
+
+        cell = new QTableWidgetItem;
+        cell->setText(properties[2]); //startAz
+        ui->satPassesTable->setItem(i, 2, cell);
+
+        cell = new QTableWidgetItem;
+        cell->setText(properties[3]); //maxEl
+        ui->satPassesTable->setItem(i, 3, cell);
+
+        cell = new QTableWidgetItem;
+        cell->setText(properties[4]); //endAz
+        ui->satPassesTable->setItem(i, 4, cell);
+
+        cell = new QTableWidgetItem;
+        cell->setText(properties[5]); //endTime
+        ui->satPassesTable->setItem(i, 5, cell);
+
+        cell = new QTableWidgetItem;
+        cell->setText(properties[6]); //duration
+        ui->satPassesTable->setItem(i, 6, cell);
+    }
+
+    ui->satPassesTable->resizeColumnsToContents();
     //homeCoord.lat=latHour+latMinute/60+latSecond/3600;
     //homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 
     //activeSat.coutSat();
-    qDebug()<<(double)activeSat.ENU().lat<<" "<<(double)activeSat.ENU().lon;
+    //qDebug()<<(double)activeSat.ENU().lat<<" "<<(double)activeSat.ENU().lon;
 }
 
 void MainWindow::on_latSecond_valueChanged(int arg1)
@@ -334,14 +385,12 @@ void MainWindow::on_actionDownload_map_triggered()
                                          tr("URL:"), QLineEdit::Normal,
                                          "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Large_World_Physical_Map.png/2560px-Large_World_Physical_Map.png", &ok);
     if(ok){
-
         QStringList URLs;
         URLs.append(text);
         downloader.setPath(QString::fromStdString(mapPath.string()));
         downloader.setURLs(URLs);
         QTimer wait;
         wait.singleShot(0, &downloader, SLOT(execute()));
-
     }
     else{
         QMessageBox* error = new QMessageBox();

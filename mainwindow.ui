@@ -86,6 +86,11 @@
           </column>
           <column>
            <property name="text">
+            <string>startTime</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
             <string>startAzimuth</string>
            </property>
           </column>
@@ -97,6 +102,11 @@
           <column>
            <property name="text">
             <string>endAzimuth</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>endTime</string>
            </property>
           </column>
           <column>
@@ -432,7 +442,7 @@
      <x>0</x>
      <y>0</y>
      <width>661</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSatMap">

@@ -70,10 +70,5 @@ struct latlong{
 
 inline latlong homeCoord;
 inline float height;
-/*template <typename T>
 
-T** MatrixMult (T** m1, T** m2){
-
-}
-*/
 #endif // INCLUDES_H

@@ -14,6 +14,7 @@ More About Sidereal Time:
 https://en.wikipedia.org/wiki/Sidereal_time#Sidereal_time
 https://celestrak.com/columns/v02n02/
 */
+
 satellite::satellite(){
     this->a = cbrt( (G * Me) / pow(n, 2) );
     this->t=QDateTime::currentDateTimeUtc();
@@ -333,7 +334,7 @@ void satellite::coutSat(){
     qDebug()<<i;// inclination
 }
 
-QStringList satellite::passPredict(int hours){
+QStringList satellite::passPredict(int hours, int accuracy){
     QStringList passList;
     QString pass;
 
@@ -344,31 +345,38 @@ QStringList satellite::passPredict(int hours){
 
     bool hasPassStarted=false;
     long double startAz, endAz, maxElev=0;
-    int start, finish, duration;
+    long long int start, finish, duration;
 
-    for(int i=t.toSecsSinceEpoch(); i<finish_Prediction.toSecsSinceEpoch(); i=i+10){
+    for(long long int i=t.toSecsSinceEpoch(); i<finish_Prediction.toSecsSinceEpoch(); i=i+accuracy){
         t=QDateTime::fromSecsSinceEpoch(i);
         currentAzEl=this->ENU();
         maxElev=0;
-        while(currentAzEl.lat>0){
+        start=i;
+        while(currentAzEl.lat>0 && i<finish_Prediction.toSecsSinceEpoch()){
             if(!hasPassStarted)
             {
                 startAz=currentAzEl.lon;
                 start=i;
+                passCount++;
                 hasPassStarted=true;
             }
             if(maxElev<currentAzEl.lat)
                 maxElev=currentAzEl.lat;
+            this->updateTime(QDateTime::fromSecsSinceEpoch(i));
             currentAzEl=this->ENU();
-            i=i+10;
+            i=i+accuracy;
         }
         if(hasPassStarted){
             endAz=currentAzEl.lon;
             finish=i;
             duration=finish-start;
-            pass=QString::number(passCount)+":"+QString::number((double)startAz)+":"+QString::number((double)maxElev)
-                    +":"+QString::number((double)endAz)+":"+QString::number(duration);
-            qDebug()<<pass;
+            pass=   QString::number(passCount)+";"
+                    +QDateTime::fromSecsSinceEpoch(start).toString()+";"
+                    +QString::number((double)startAz)+";"
+                    +QString::number((double)maxElev)+";"
+                    +QString::number((double)endAz)+";"
+                    +QDateTime::fromSecsSinceEpoch(finish).toString()+";"
+                    +QString::number(duration);
             passList.append(pass);
             hasPassStarted=false;
         }
