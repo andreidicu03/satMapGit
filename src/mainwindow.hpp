@@ -2,10 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "includes.h"
-#include "sat_track.h"
-#include "download.h"
-#include "TLEParser.h"
+#include "includes.hpp"
+#include "sat_track.hpp"
+#include "download.hpp"
+#include "TLEParser.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

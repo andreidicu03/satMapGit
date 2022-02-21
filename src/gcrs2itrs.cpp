@@ -1,7 +1,7 @@
 #ifndef GCRS2ITRS_CPP
 #define GCRS2ITRS_CPP
 
-#include "gcrs2itrs.h"
+#include "gcrs2itrs.hpp"
 
 inline void N(float T, float &ε, float &Δψ, float &Δε){
     float T2=T*T;

@@ -13,27 +13,27 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    TLEParser.cpp \
-    download.cpp \
-    gcrs2itrs.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    rotation_matrices.cpp \
-    sat_track.cpp
+    src/TLEParser.cpp \
+    src/download.cpp \
+    src/gcrs2itrs.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/rotation_matrices.cpp \
+    src/sat_track.cpp
 
 HEADERS += \
-    TLEParser.h \
-    download.h \
-    fileSearch.h \
-    gcrs2itrs.h \
-    includes.h \
-    mainwindow.h \
-    nutation_table.h \
-    rotation_matrices.h \
-    sat_track.h
+    src/TLEParser.hpp \
+    src/download.hpp \
+    src/fileSearch.hpp \
+    src/gcrs2itrs.hpp \
+    src/includes.hpp \
+    src/mainwindow.hpp \
+    src/nutation_table.hpp \
+    src/rotation_matrices.hpp \
+    src/sat_track.hpp
 
 FORMS += \
-    mainwindow.ui
+    ui/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

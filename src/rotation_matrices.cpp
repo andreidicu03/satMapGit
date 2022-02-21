@@ -1,7 +1,7 @@
 #ifndef ROTATION_MATRICES_CPP
 #define ROTATION_MATRICES_CPP
 
-#include "rotation_matrices.h"
+#include "rotation_matrices.hpp"
 
 void angleSinCos(float n, float& S, float& C){
     S=sin(n);

@@ -1,7 +1,7 @@
 #include <QCoreApplication>
 #include <QMessageBox>
 
-#include "download.h"
+#include "download.hpp"
 
 // constructor
 download::download()
