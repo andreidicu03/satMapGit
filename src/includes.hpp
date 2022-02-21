@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QtCore>
 #include <QString>
-#include <QGeoRoute>
 #include <QGraphicsScene>
 #include <QFile>
 #include <QDebug>

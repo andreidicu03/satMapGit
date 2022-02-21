@@ -11,7 +11,9 @@ Install the [QMake](https://doc.qt.io/qt-5/qmake-manual.html) build utility.
 For Debian based distros it is located in the apt repository.
 
 ```bash
-sudo apt install qt5-qmake
+sudo apt install qtbase5-dev # core dependencies
+sudo apt install libmarble-dev # 3d map
+sudo apt install qt5-qmake # lmao
 ```
 
 ### Arch
