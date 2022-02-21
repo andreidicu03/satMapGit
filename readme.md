@@ -1,54 +1,46 @@
 # SatMap
 
-SatMap is a QT application for dealing with satellites.
+SatMap is a [QT](https://wiki.qt.io/About_Qt) application for dealing with satellites.
 
 ## Installation
 
-Install the [QMake](https://doc.qt.io/qt-5/qmake-manual.html) build utility.
-
-### Debian
-
-For Debian based distros it is located in the apt repository.
+### Debian Dependencies
 
 ```bash
-sudo apt install qtbase5-dev # core dependencies
-sudo apt install libmarble-dev # 3d map
-sudo apt install qt5-qmake # lmao
+sudo apt install build-essential
+sudo apt install qtbase5-dev
+sudo apt install libmarble-dev
 ```
 
-### Arch
+### Arch Dependencies
 
-For Arch it is in pacman repository
-
-```
+```bash
 sudo pacman -Syuu qt5-base
 ```
 
-# All
+## Building
 
-Clone the repository and Create a build directory.
+Build using [QMake](https://doc.qt.io/qt-5/qmake-manual.html).
+...Installation Flags...
 
 ```bash
 git clone https://github.com/BarbatBoss03/satMapGit.git
-mkdir build
-cd build
-qmake
+mkdir build; cd build
+qmake ..
+make
 ```
 
 ## Usage
 
-```python
-import foobar
+```bash
 
-# returns 'words'
-foobar.pluralize('word')
+./satMap
 
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
 ```
+
+## Algorithm
+
+IAU1980 Nutation & IAU 1976 Precession Models
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
