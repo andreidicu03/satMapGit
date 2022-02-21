@@ -1,9 +1,9 @@
 #ifndef GCRS2ITRS_H
 #define GCRS2ITRS_H
 
-#include "includes.h"
-#include "rotation_matrices.h"
-#include "nutation_table.h"
+#include "includes.hpp"
+#include "rotation_matrices.hpp"
+#include "nutation_table.hpp"
 
 inline void N(float T, float &ε, float &Δψ, float &Δε);
 inline void P(float T, float &z, float &ϑ, float &ζ);

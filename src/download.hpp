@@ -1,7 +1,7 @@
 #ifndef DOWNLOAD_H
 #define DOWNLOAD_H
 
-#include "includes.h"
+#include "includes.hpp"
 #include <QObject>
 #include <QByteArray>
 #include <QNetworkAccessManager>

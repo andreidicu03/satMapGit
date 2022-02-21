@@ -1,4 +1,4 @@
-#include <sat_track.h>
+#include "sat_track.hpp"
 
 /*
          Greenwich Mean Sidereal Time (GMST) - (Old) Earth Rotation Angle

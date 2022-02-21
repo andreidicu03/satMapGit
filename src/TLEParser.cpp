@@ -1,4 +1,4 @@
-#include "TLEParser.h"
+#include "TLEParser.hpp"
 
 QList<TLEdata> SatSearch(fs::path& satPath)
 {

@@ -5,10 +5,10 @@
 #include <marble/LayerInterface.h>
 #include <marble/GeoDataLineString.h>
 
-#include "mainwindow.h"
-#include "sat_track.h"
-#include "download.h"
-#include "TLEParser.h"
+#include "mainwindow.hpp"
+#include "sat_track.hpp"
+#include "download.hpp"
+#include "TLEParser.hpp"
 
 #include <QApplication>
 #include <QtGui/QKeyEvent>
@@ -16,7 +16,7 @@
 
 #include <locale>
 
-#include <includes.h>
+#include "includes.hpp"
 
 using namespace Marble;
 

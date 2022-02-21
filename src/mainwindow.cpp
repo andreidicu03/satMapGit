@@ -1,6 +1,6 @@
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 #include "ui_mainwindow.h"
-#include "fileSearch.h"
+#include "fileSearch.hpp"
 #include <QMessageBox>
 #include <QInputDialog>
 
