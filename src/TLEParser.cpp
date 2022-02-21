@@ -4,14 +4,14 @@ QList<TLEdata> SatSearch(fs::path& satPath)
 {
     QList<TLEdata> satelliteList;
     TLEdata satBuf;
-    string line1, line2;
-    string buf={};
+    std::string line1, line2;
+    std::string buf={};
     fs::path iter;
     int i=0;
     if (!fs::is_directory(satPath)) //if the object isn't a directory it tries to open it with fstream
     {
         iter = satPath;
-        ifstream f(satPath);
+        std::ifstream f(satPath);
         while (getline(f, satBuf.SatName))
         {
             getline(f,line1);

@@ -32,7 +32,7 @@ private:
 
     QStringList mapFiles, tleFiles;
     fs::path mapPath, tlePath, activeTLE;
-    download downloader;
+    download downloader, downloader1, downloader2;
 
     QJsonArray satFrequencies;
 
@@ -40,6 +40,7 @@ private:
     float latHour, latMinute, latSecond;
     float longHour, longMinute, longSecond;
     bool latDir, longDir;
+    QStringList outLinks, tleDownLinks, mapDownLinks;
 
     int currentSatIndex;
 

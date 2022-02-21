@@ -33,8 +33,6 @@ MainWindow::MainWindow(QWidget *parent):
         fs::create_directory(mapPath);
     }
 
-    //this->readSettings();
-
     activeTLE="";
 
     tleFiles=fileSearch(QString::fromStdString(tlePath.string()), ".txt");
@@ -64,13 +62,13 @@ MainWindow::MainWindow(QWidget *parent):
     QJsonDocument doc = QJsonDocument::fromJson(raw.toUtf8());
     satFrequencies=doc.array();
 
-    readSettings();
+    this->readSettings();
 
-    QSettings settings("Barbatboss03", "satMap");
+    //QSettings settings("Barbatboss03", "satMap");
 
-    qDebug()<<settings.allKeys();
+    //qDebug()<<settings.allKeys();
 
-    for(int i=0; i<settings.allKeys().size(); i++) qDebug()<<settings.value(settings.allKeys()[i]);
+    //for(int i=0; i<settings.allKeys().size(); i++) qDebug()<<settings.value(settings.allKeys()[i]);
 
     //ui->satFreqTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     //ui->satPassesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -91,17 +89,14 @@ void MainWindow::writeSettings(){
     settings.setValue("homeCoordlon", QVariant::fromValue(QString::number((double)homeCoord.lon)));
     settings.setValue("homeCoordh", QVariant::fromValue(QString::number((double)homeCoord.h)));
     QString links = ui->links->toPlainText();
-    QStringList linkList = links.split(QRegExp("[\n]"), QString::SkipEmptyParts);
-
-    qDebug()<<links;
-
+    QStringList linkList = links.split(QRegExp("[\n]"));
     settings.beginGroup("links");
 
     int TLEcount=0, MAPcount=0;
 
     for (QString link : linkList){
-        QString key = link.section(':', 1, 1);
-        QString value = link.section(':', 1, 1);
+        QString key = link.section(' ', 0, 0);
+        QString value = link.section(' ', 1, 1);
         settings.setValue(key, value);
         if(key.contains("TLE")) TLEcount++;
         if(key.contains("MAP")) MAPcount++;
@@ -109,8 +104,6 @@ void MainWindow::writeSettings(){
 
     settings.setValue("tleLinkCount", QVariant::fromValue(TLEcount));
     settings.setValue("mapLinkCount", QVariant::fromValue(MAPcount));
-
-    qDebug()<<"gg write";
 }
 
 void MainWindow::readSettings(){
@@ -129,6 +122,43 @@ void MainWindow::readSettings(){
     latMinute=(int)((homeCoord.lat-(int)homeCoord.lat)*60);
     latSecond=(int)((((homeCoord.lat-(int)homeCoord.lat)*60)-(int)((homeCoord.lat-(int)homeCoord.lat)*60))*60);
 
+    settings.beginGroup("links");
+
+    int TLEcount=0, MAPcount=0;
+
+    TLEcount=settings.value("tleLinkCount").toInt();
+    MAPcount=settings.value("mapLinkCount").toInt();
+
+    for(int i=0; i<TLEcount; i++){
+        QString key="TLE", value;
+        key.append(QString::number(i));
+        value=settings.value(key).toString();
+        outLinks.append(key+" "+value);
+        tleDownLinks.append(value);
+    }
+
+    for(int i=0; i<MAPcount; i++){
+        QString key="MAP", value;
+        key.append(QString::number(i));
+        value=settings.value(key).toString();
+        outLinks.append(key+" "+value);
+        mapDownLinks.append(value);
+    }
+
+    QString text=outLinks.join("\n");
+
+    QTimer wait1;
+
+    downloader1.setPath(QString::fromStdString(tlePath.string()));
+    downloader1.setURLs(tleDownLinks);
+    wait1.singleShot(0, &downloader1, SLOT(execute()));
+
+    QTimer wait2;
+
+    downloader2.setPath(QString::fromStdString(mapPath.string()));
+    downloader2.setURLs(mapDownLinks);
+    wait2.singleShot(0, &downloader2, SLOT(execute()));
+
     ui->latHour->setValue(latHour);
     ui->latMinute->setValue(latMinute);
     ui->latSecond->setValue(latSecond);
@@ -139,42 +169,7 @@ void MainWindow::readSettings(){
 
     ui->heightSpinBox->setValue(homeCoord.h);
 
-    int TLEcount=0, MAPcount=0;
-
-    TLEcount=settings.value("tleLinkCount").toInt();
-    MAPcount=settings.value("mapLinkCount").toInt();
-
-    QStringList outLinks, tleDownLinks, mapDownLinks;
-
-    for(int i=0; i<TLEcount; i++){
-        QString key="TLE", value;
-        key.append(QString::number(i));
-        value=settings.value(key).toString();
-        outLinks.append(key+":"+value);
-        tleDownLinks.append(value);
-    }
-    for(int i=0; i<MAPcount; i++){
-        QString key="MAP", value;
-        key.append(QString::number(i));
-        value=settings.value(key).toString();
-        outLinks.append(key+":"+value);
-        mapDownLinks.append(value);
-    }
-    QTimer wait;
-
-    QString text=outLinks.join("\n");
-
     ui->links->setText(text);
-
-    downloader.setPath(QString::fromStdString(tlePath.string()));
-    downloader.setURLs(tleDownLinks);
-    wait.singleShot(0, &downloader, SLOT(execute()));
-
-    downloader.setPath(QString::fromStdString(mapPath.string()));
-    downloader.setURLs(mapDownLinks);
-    wait.singleShot(0, &downloader, SLOT(execute()));
-
-    qDebug()<<"gg read";
 
 }
 
