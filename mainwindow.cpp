@@ -22,10 +22,6 @@ MainWindow::MainWindow(QWidget *parent):
     homeCoord.lat=latHour+latMinute/60+latSecond/3600;
     homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 
-    homeCoord.lat=44.4268;
-    homeCoord.lon=26.1025;
-    homeCoord.h=90;
-
     tlePath="./tle";
     mapPath="./map";
 
@@ -68,7 +64,11 @@ MainWindow::MainWindow(QWidget *parent):
     QJsonDocument doc = QJsonDocument::fromJson(raw.toUtf8());
     satFrequencies=doc.array();
 
+    readSettings();
+
     QSettings settings("Barbatboss03", "satMap");
+
+    qDebug()<<settings.allKeys();
 
     for(int i=0; i<settings.allKeys().size(); i++) qDebug()<<settings.value(settings.allKeys()[i]);
 
@@ -120,6 +120,24 @@ void MainWindow::readSettings(){
     homeCoord.lat=settings.value("homeCoordlat").toDouble();
     homeCoord.lon=settings.value("homeCoordlon").toDouble();
     homeCoord.h=settings.value("homeCoordh").toDouble();
+
+    longHour=(int)homeCoord.lon;
+    longMinute=(int)((homeCoord.lon-(int)homeCoord.lon)*60);
+    longSecond=(int)((((homeCoord.lon-(int)homeCoord.lon)*60)-(int)((homeCoord.lon-(int)homeCoord.lon)*60))*60);
+
+    latHour=(int)homeCoord.lat;
+    latMinute=(int)((homeCoord.lat-(int)homeCoord.lat)*60);
+    latSecond=(int)((((homeCoord.lat-(int)homeCoord.lat)*60)-(int)((homeCoord.lat-(int)homeCoord.lat)*60))*60);
+
+    ui->latHour->setValue(latHour);
+    ui->latMinute->setValue(latMinute);
+    ui->latSecond->setValue(latSecond);
+
+    ui->longHour->setValue(longHour);
+    ui->longMinute->setValue(longMinute);
+    ui->longSecond->setValue(longSecond);
+
+    ui->heightSpinBox->setValue(homeCoord.h);
 
     int TLEcount=0, MAPcount=0;
 
@@ -462,5 +480,25 @@ void MainWindow::on_actionUpdate_Freq_triggered()
     }
 
 
+}
+
+
+void MainWindow::on_longChoose_currentIndexChanged(int index)
+{
+    if(index){
+        homeCoord.lon=(-1)*(longHour+longMinute/60+longSecond/3600);
+    }
+    else
+        homeCoord.lon=(longHour+longMinute/60+longSecond/3600);
+}
+
+
+void MainWindow::on_latChoose_currentIndexChanged(int index)
+{
+    if(index){
+        homeCoord.lat=(-1)*(latHour+latMinute/60+latSecond/3600);
+    }
+    else
+        homeCoord.lat=(latHour+latMinute/60+latSecond/3600);
 }
 

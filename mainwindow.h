@@ -37,8 +37,8 @@ private:
     QJsonArray satFrequencies;
 
     latlong homeCoord;
-    int latHour, latMinute, latSecond;
-    int longHour, longMinute, longSecond;
+    float latHour, latMinute, latSecond;
+    float longHour, longMinute, longSecond;
     bool latDir, longDir;
 
     int currentSatIndex;
@@ -64,6 +64,8 @@ private slots:
     void on_tleOK_clicked();
     void on_actionRefresh_maps_triggered();
     void on_actionUpdate_Freq_triggered();
+    void on_longChoose_currentIndexChanged(int index);
+    void on_latChoose_currentIndexChanged(int index);
 };
 
 #endif // MAINWINDOW_H
