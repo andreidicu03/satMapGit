@@ -1,13 +1,26 @@
-# Foobar
+# SatMap
 
-Foobar is a Python library for dealing with word pluralization.
+SatMap is a QT application for dealing with satellites.
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Install the [QMake](https://doc.qt.io/qt-5/qmake-manual.html) build utility.
+
+### Ubuntu
+
+For Ubuntu & Ubuntu-like distros it is located in the apt repository.
 
 ```bash
-pip install foobar
+sudo apt install qt5-qmake
+```
+
+Clone the repository and Create a build directory.
+
+```bash
+git clone https://github.com/BarbatBoss03/satMapGit.git
+mkdir build
+cd build
+qmake
 ```
 
 ## Usage
@@ -31,4 +44,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[Barbat & Sebus](https://choosealicense.com/licenses/mit/)
