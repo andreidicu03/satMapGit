@@ -6,13 +6,23 @@ SatMap is a QT application for dealing with satellites.
 
 Install the [QMake](https://doc.qt.io/qt-5/qmake-manual.html) build utility.
 
-### Ubuntu
+### Debian
 
-For Ubuntu & Ubuntu-like distros it is located in the apt repository.
+For Debian based distros it is located in the apt repository.
 
 ```bash
 sudo apt install qt5-qmake
 ```
+
+### Arch
+
+For Arch it is in pacman repository
+
+```
+sudo pacman -Syuu qt5-base
+```
+
+# All
 
 Clone the repository and Create a build directory.
 
