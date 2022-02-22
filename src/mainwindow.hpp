@@ -11,6 +11,46 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+class timeUp : public QThread
+{
+    Q_OBJECT
+
+    void run() override {
+
+        QDateTime time;
+        do{
+            time=QDateTime::currentDateTimeUtc();
+            emit timeChanged(time);
+            //QThread::msleep(50);
+
+        }while(true);
+    }
+    signals:
+        void timeChanged(QDateTime time);
+};
+
+/*
+void MainWindow::updateTime()
+{
+    UtcTime=QDateTime::currentDateTimeUtc();
+    activeSat.updateTime(UtcTime);
+
+    latlong LLH=activeSat.LLH();
+    latlong ENU=activeSat.ENU();
+    //qDebug()<<(double)ENU.lat<<" "<<(double)ENU.lon;
+    QString llhOUT="lat: " + QString::number(LLH.lat, 'g', 4) + "° lon: " + QString::number(LLH.lon, 'g', 4)
+            + "° h:" + QString::number(LLH.h, 'g', 4) + "km";
+
+    ui->coordLabel->setText(llhOUT);
+
+    QString enuOUT="az: " + QString::number(ENU.lon, 'g', 4) + "° el: " + QString::number(ENU.lat, 'g', 4)+ "°";
+
+    ui->azElLabel->setText(enuOUT);
+
+    QThread::msleep(50);
+}
+*/
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -42,12 +82,17 @@ private:
     bool latDir, longDir;
     QStringList outLinks, tleDownLinks, mapDownLinks;
 
+    QString llhOUT, enuOUT;
+    latlong LLH, ENU;
+
+    timeUp *t1;
+
     int currentSatIndex;
 
 private slots:
     void writeSettings();
     void readSettings();
-    void updateTime();
+    void updateTime(QDateTime UtcTime);
     void on_actionAbout_triggered();
     void on_actionUpdate_TLEs_triggered();
     void on_actionRefresh_TLEs_triggered();

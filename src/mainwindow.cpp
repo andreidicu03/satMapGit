@@ -10,10 +10,6 @@ MainWindow::MainWindow(QWidget *parent):
 {
     UtcTime.setTimeSpec(Qt::UTC);
 
-    QTimer* updateTimer = new QTimer(this);
-    connect(updateTimer, SIGNAL(timeout()), this, SLOT(updateTime()));
-    updateTimer->start();
-
     setlocale (LC_ALL,"en_US.utf8");
     ui->setupUi(this);
 
@@ -62,16 +58,13 @@ MainWindow::MainWindow(QWidget *parent):
     QJsonDocument doc = QJsonDocument::fromJson(raw.toUtf8());
     satFrequencies=doc.array();
 
+    t1 = new timeUp();
+
+    connect(t1, SIGNAL(&timeChanged(QDateTime)), this, SLOT(&updateTime(QDateTime)));
+
+    t1->start();
+
     this->readSettings();
-
-    //QSettings settings("Barbatboss03", "satMap");
-
-    //qDebug()<<settings.allKeys();
-
-    //for(int i=0; i<settings.allKeys().size(); i++) qDebug()<<settings.value(settings.allKeys()[i]);
-
-    //ui->satFreqTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    //ui->satPassesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 MainWindow::~MainWindow()
@@ -173,24 +166,24 @@ void MainWindow::readSettings(){
 
 }
 
-void MainWindow::updateTime()
+void MainWindow::updateTime(QDateTime UtcTime)
 {    
-    UtcTime=QDateTime::currentDateTimeUtc();
+    this->UtcTime=UtcTime;
     activeSat.updateTime(UtcTime);
 
-    latlong LLH=activeSat.LLH();
-    latlong ENU=activeSat.ENU();
-    //qDebug()<<(double)ENU.lat<<" "<<(double)ENU.lon;
-    QString llhOUT="lat: " + QString::number(LLH.lat, 'g', 4) + "° lon: " + QString::number(LLH.lon, 'g', 4)
+    this->LLH=activeSat.LLH();
+    this->ENU=activeSat.ENU();
+    qDebug()<<(double)ENU.lat<<" "<<(double)ENU.lon;
+    this->llhOUT="lat: " + QString::number(LLH.lat, 'g', 4) + "° lon: " + QString::number(LLH.lon, 'g', 4)
             + "° h:" + QString::number(LLH.h, 'g', 4) + "km";
 
-    ui->coordLabel->setText(llhOUT);
+    this->ui->coordLabel->setText(llhOUT);
 
-    QString enuOUT="az: " + QString::number(ENU.lon, 'g', 4) + "° el: " + QString::number(ENU.lat, 'g', 4)+ "°";
+    this->enuOUT="az: " + QString::number(ENU.lon, 'g', 4) + "° el: " + QString::number(ENU.lat, 'g', 4)+ "°";
 
-    ui->azElLabel->setText(enuOUT);
+    this->ui->azElLabel->setText(enuOUT);
 
-    QThread::msleep(50);
+    UtcTime.~QDateTime();
 }
 
 void MainWindow::on_actionAbout_triggered()
