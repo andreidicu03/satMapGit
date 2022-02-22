@@ -21,35 +21,13 @@ class timeUp : public QThread
         do{
             time=QDateTime::currentDateTimeUtc();
             emit timeChanged(time);
-            //QThread::msleep(50);
+            QThread::msleep(1000);
 
         }while(true);
     }
     signals:
         void timeChanged(QDateTime time);
 };
-
-/*
-void MainWindow::updateTime()
-{
-    UtcTime=QDateTime::currentDateTimeUtc();
-    activeSat.updateTime(UtcTime);
-
-    latlong LLH=activeSat.LLH();
-    latlong ENU=activeSat.ENU();
-    //qDebug()<<(double)ENU.lat<<" "<<(double)ENU.lon;
-    QString llhOUT="lat: " + QString::number(LLH.lat, 'g', 4) + "° lon: " + QString::number(LLH.lon, 'g', 4)
-            + "° h:" + QString::number(LLH.h, 'g', 4) + "km";
-
-    ui->coordLabel->setText(llhOUT);
-
-    QString enuOUT="az: " + QString::number(ENU.lon, 'g', 4) + "° el: " + QString::number(ENU.lat, 'g', 4)+ "°";
-
-    ui->azElLabel->setText(enuOUT);
-
-    QThread::msleep(50);
-}
-*/
 
 class MainWindow : public QMainWindow
 {
