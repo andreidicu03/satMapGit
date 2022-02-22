@@ -26,7 +26,7 @@ class timeUp : public QThread
         }while(true);
     }
     signals:
-        void timeChanged(QDateTime time);
+        void* timeChanged(QDateTime time);
 };
 
 class MainWindow : public QMainWindow
@@ -70,7 +70,7 @@ private:
 private slots:
     void writeSettings();
     void readSettings();
-    void updateTime(QDateTime UtcTime);
+    void* updateTime(QDateTime UtcTime);
     void on_actionAbout_triggered();
     void on_actionUpdate_TLEs_triggered();
     void on_actionRefresh_TLEs_triggered();

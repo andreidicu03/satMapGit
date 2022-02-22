@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     t1 = new timeUp();
 
-    connect(t1, SIGNAL(&timeChanged(QDateTime)), this, SLOT(&updateTime(QDateTime)));
+    connect(t1, SIGNAL(timeChanged(QDateTime)), this, SLOT(updateTime(QDateTime)));
 
     t1->start();
 
@@ -166,14 +166,14 @@ void MainWindow::readSettings(){
 
 }
 
-void MainWindow::updateTime(QDateTime UtcTime)
+void* MainWindow::updateTime(QDateTime UtcTime)
 {    
     this->UtcTime=UtcTime;
     activeSat.updateTime(UtcTime);
 
     this->LLH=activeSat.LLH();
     this->ENU=activeSat.ENU();
-    qDebug()<<(double)ENU.lat<<" "<<(double)ENU.lon;
+
     this->llhOUT="lat: " + QString::number(LLH.lat, 'g', 4) + "° lon: " + QString::number(LLH.lon, 'g', 4)
             + "° h:" + QString::number(LLH.h, 'g', 4) + "km";
 
