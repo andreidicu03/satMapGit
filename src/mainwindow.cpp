@@ -18,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent):
     homeCoord.lat=latHour+latMinute/60+latSecond/3600;
     homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 
+    passDuration=8;
+    passAcc=10;
+
     tlePath="./tle";
     mapPath="./map";
 
@@ -60,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     t1 = new timeUp();
 
-    connect(t1, SIGNAL(timeChanged(QDateTime)), this, SLOT(updateTime(QDateTime)));
+    connect(t1, &timeUp::timeChanged, this, &MainWindow::updateTime, Qt::DirectConnection);
 
     t1->start();
 
@@ -83,6 +86,10 @@ void MainWindow::writeSettings(){
     settings.setValue("homeCoordh", QVariant::fromValue(QString::number((double)homeCoord.h)));
     QString links = ui->links->toPlainText();
     QStringList linkList = links.split(QRegExp("[\n]"));
+
+    settings.setValue("passDuration", QVariant::fromValue(passDuration));
+    settings.setValue("passAcc", QVariant::fromValue(passAcc));
+
     settings.beginGroup("links");
 
     int TLEcount=0, MAPcount=0;
@@ -114,6 +121,9 @@ void MainWindow::readSettings(){
     latHour=(int)homeCoord.lat;
     latMinute=(int)((homeCoord.lat-(int)homeCoord.lat)*60);
     latSecond=(int)((((homeCoord.lat-(int)homeCoord.lat)*60)-(int)((homeCoord.lat-(int)homeCoord.lat)*60))*60);
+
+    passDuration=settings.value("passDuration").toInt();
+    passAcc=settings.value("passAcc").toInt();
 
     settings.beginGroup("links");
 
@@ -162,11 +172,14 @@ void MainWindow::readSettings(){
 
     ui->heightSpinBox->setValue(homeCoord.h);
 
+    ui->passDuration->setValue(passDuration);
+    ui->passAcc->setValue(passAcc);
+
     ui->links->setText(text);
 
 }
 
-void* MainWindow::updateTime(QDateTime UtcTime)
+void MainWindow::updateTime(QDateTime UtcTime)
 {    
     this->UtcTime=UtcTime;
     activeSat.updateTime(UtcTime);
@@ -488,5 +501,17 @@ void MainWindow::on_latChoose_currentIndexChanged(int index)
     }
     else
         homeCoord.lat=(latHour+latMinute/60+latSecond/3600);
+}
+
+
+void MainWindow::on_passDuration_valueChanged(int arg1)
+{
+    passDuration=arg1;
+}
+
+
+void MainWindow::on_passAcc_valueChanged(int arg1)
+{
+    passAcc=arg1;
 }
 

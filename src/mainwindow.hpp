@@ -26,7 +26,7 @@ class timeUp : public QThread
         }while(true);
     }
     signals:
-        void* timeChanged(QDateTime time);
+        void timeChanged(QDateTime time);
 };
 
 class MainWindow : public QMainWindow
@@ -60,6 +60,8 @@ private:
     bool latDir, longDir;
     QStringList outLinks, tleDownLinks, mapDownLinks;
 
+    int passDuration, passAcc;
+
     QString llhOUT, enuOUT;
     latlong LLH, ENU;
 
@@ -70,7 +72,7 @@ private:
 private slots:
     void writeSettings();
     void readSettings();
-    void* updateTime(QDateTime UtcTime);
+    void updateTime(QDateTime UtcTime);
     void on_actionAbout_triggered();
     void on_actionUpdate_TLEs_triggered();
     void on_actionRefresh_TLEs_triggered();
@@ -90,6 +92,8 @@ private slots:
     void on_actionUpdate_Freq_triggered();
     void on_longChoose_currentIndexChanged(int index);
     void on_latChoose_currentIndexChanged(int index);
+    void on_passDuration_valueChanged(int arg1);
+    void on_passAcc_valueChanged(int arg1);
 };
 
 #endif // MAINWINDOW_H
