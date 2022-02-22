@@ -2,7 +2,7 @@
 
 SatMap is a [QT](https://wiki.qt.io/About_Qt) application for dealing with satellites.
 
-## Installation
+## Pre-Installation
 
 ### Debian Dependencies
 
@@ -15,7 +15,8 @@ sudo apt install libmarble-dev
 ### Arch Dependencies
 
 ```bash
-sudo pacman -Syuu qt5-base
+sudo pacman -Syu qt5-base
+sudo pacman -Syu marble-common
 ```
 
 ## Building
@@ -26,8 +27,8 @@ Build using [QMake](https://doc.qt.io/qt-5/qmake-manual.html).
 ```bash
 git clone https://github.com/BarbatBoss03/satMapGit.git
 mkdir build; cd build
-qmake ..
-make
+qmake ../satMap.pro
+make #&& sudo make install
 ```
 
 ## Usage
