@@ -1,6 +1,13 @@
 #ifndef INCLUDES_H
 #define INCLUDES_H
 
+#include <marble/MarbleWidget.h>
+#include <marble/MarbleMap.h>
+#include <marble/MarbleModel.h>
+#include <marble/GeoPainter.h>
+#include <marble/LayerInterface.h>
+#include <marble/GeoDataLineString.h>
+
 #include <QObject>
 #include <QtCore>
 #include <QString>

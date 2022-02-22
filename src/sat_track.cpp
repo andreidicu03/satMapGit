@@ -385,8 +385,30 @@ QStringList satellite::passPredict(int hours, int accuracy){
     return passList;
 }
 
-QVector<coord> satellite::satTrail(int hours, int accuracy){
+QVector<Marble::GeoDataCoordinates> satellite::satTrail(int hours, int accuracy){
+    QVector<Marble::GeoDataCoordinates> pointVec;
 
+    int seconds=hours*3600;
+    QDateTime start, finish;
+    start=QDateTime::fromSecsSinceEpoch(this->t.toSecsSinceEpoch()-(seconds/2));
+    finish=QDateTime::fromSecsSinceEpoch(this->t.toSecsSinceEpoch()+(seconds/2));
+    int increment=(hours*3600)/accuracy;
+
+    qDebug()<<start<<" "<<finish;
+
+    for(long long int i=start.toSecsSinceEpoch(); i<=finish.toSecsSinceEpoch(); i=i+increment){
+        this->t=QDateTime::fromSecsSinceEpoch(i);
+        Marble::GeoDataCoordinates point;
+        latlong pnt=this->LLH();
+
+        point.setLatitude(pnt.lat);
+        point.setLongitude(pnt.lon);
+        point.setAltitude(pnt.h);
+
+        pointVec.append(point);
+    }
+
+    return pointVec;
 }
 
 void satellite::updateTime(QDateTime devTime){

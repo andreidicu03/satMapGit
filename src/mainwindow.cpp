@@ -254,7 +254,6 @@ void MainWindow::on_actionQuit_triggered()
     this->close();
 }
 
-
 void MainWindow::on_satBox_currentIndexChanged(int index)
 {
     satellite newSat;
@@ -265,6 +264,7 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
         }
     }
     activeSat=newSat;
+
     ui->satFreqTable->setRowCount(0);
     int k=0;
     for(int i =0; i<satFrequencies.size(); i++){
@@ -348,11 +348,7 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
     }
 
     ui->satPassesTable->resizeColumnsToContents();
-    //homeCoord.lat=latHour+latMinute/60+latSecond/3600;
-    //homeCoord.lon=longHour+longMinute/60+longSecond/3600;
 
-    //activeSat.coutSat();
-    //qDebug()<<(double)activeSat.ENU().lat<<" "<<(double)activeSat.ENU().lon;
 }
 
 void MainWindow::on_latSecond_valueChanged(int arg1)
@@ -434,12 +430,10 @@ void MainWindow::on_mapOK_clicked()
     ui->mapView->show();
 }
 
-
 void MainWindow::on_OK_clicked()
 {
     this->writeSettings();
 }
-
 
 void MainWindow::on_tleOK_clicked()
 {
@@ -452,7 +446,6 @@ void MainWindow::on_tleOK_clicked()
     }
 }
 
-
 void MainWindow::on_actionRefresh_maps_triggered()
 {
     mapFiles=fileSearch(QString::fromStdString(mapPath.string()), ".png");
@@ -462,7 +455,6 @@ void MainWindow::on_actionRefresh_maps_triggered()
         ui->mapSelect->addItem(i);
     }
 }
-
 
 void MainWindow::on_actionUpdate_Freq_triggered()
 {
@@ -483,7 +475,6 @@ void MainWindow::on_actionUpdate_Freq_triggered()
 
 }
 
-
 void MainWindow::on_longChoose_currentIndexChanged(int index)
 {
     if(index){
@@ -492,7 +483,6 @@ void MainWindow::on_longChoose_currentIndexChanged(int index)
     else
         homeCoord.lon=(longHour+longMinute/60+longSecond/3600);
 }
-
 
 void MainWindow::on_latChoose_currentIndexChanged(int index)
 {
@@ -503,12 +493,10 @@ void MainWindow::on_latChoose_currentIndexChanged(int index)
         homeCoord.lat=(latHour+latMinute/60+latSecond/3600);
 }
 
-
 void MainWindow::on_passDuration_valueChanged(int arg1)
 {
     passDuration=arg1;
 }
-
 
 void MainWindow::on_passAcc_valueChanged(int arg1)
 {
