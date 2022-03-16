@@ -11,11 +11,13 @@ download::download()
             this, SLOT(downloadFinished(QNetworkReply*)));
 }
 
-void download::setURLs(QStringList args){
+void download::setURLs(QStringList args)
+{
     this->URLs=args;
 }
 
-void download::setPath(QString args){
+void download::setPath(QString args)
+{
     this->basePath=args;
 }
 

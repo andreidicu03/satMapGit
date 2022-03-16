@@ -196,6 +196,11 @@ void MainWindow::updateTime(QDateTime UtcTime)
 
     this->ui->azElLabel->setText(enuOUT);
 
+    Marble::GeoDataCoordinates sat;
+    sat.setAltitude(this->LLH.h);
+    sat.setLatitude(this->LLH.lat);
+    sat.setLongitude(this->LLH.lon);
+
     UtcTime.~QDateTime();
 }
 
@@ -233,8 +238,7 @@ void MainWindow::on_actionUpdate_TLEs_triggered()
     }
     ui->tleSelect->clear();
     tleFiles=fileSearch(QString::fromStdString(tlePath.string()), ".txt");
-    for(QString &i : tleFiles)
-    {
+    for(QString &i : tleFiles){
         ui->tleSelect->addItem(i);
     }
 }
@@ -243,8 +247,7 @@ void MainWindow::on_actionRefresh_TLEs_triggered()
 {
     ui->tleSelect->clear();
     tleFiles=fileSearch(QString::fromStdString(tlePath.string()), ".txt");
-    for(QString &i : tleFiles)
-    {
+    for(QString &i : tleFiles){
         ui->tleSelect->addItem(i);
     }
 }
@@ -415,8 +418,7 @@ void MainWindow::on_actionDownload_map_triggered()
     mapFiles.clear();
     mapFiles=fileSearch(QString::fromStdString(mapPath.string()), ".png");
     ui->mapSelect->clear();
-    for(QString &i : mapFiles)
-    {
+    for(QString &i : mapFiles){
         ui->mapSelect->addItem(i);
     }
 }
@@ -450,8 +452,7 @@ void MainWindow::on_actionRefresh_maps_triggered()
 {
     mapFiles=fileSearch(QString::fromStdString(mapPath.string()), ".png");
     ui->mapSelect->clear();
-    for(QString &i : mapFiles)
-    {
+    for(QString &i : mapFiles){
         ui->mapSelect->addItem(i);
     }
 }

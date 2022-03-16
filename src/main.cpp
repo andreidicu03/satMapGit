@@ -10,8 +10,6 @@
 
 #include <locale>
 
-using namespace Marble;
-
 //https://upload.wikimedia.org/wikipedia/commons/a/a7/Large_World_Physical_Map.png
 //https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Large_World_Physical_Map.png/2560px-Large_World_Physical_Map.png
 

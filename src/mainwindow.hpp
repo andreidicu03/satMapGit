@@ -76,7 +76,7 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionUpdate_TLEs_triggered();
     void on_actionRefresh_TLEs_triggered();
-    void on_actionQuit_triggered();
+    void on_actionQuit_triggered(); //Slots named on_foo_bar are error prone. Too bad!
     void on_satBox_currentIndexChanged(int index);
     void on_latSecond_valueChanged(int arg1);
     void on_latMinute_valueChanged(int arg1);

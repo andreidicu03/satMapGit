@@ -3,7 +3,8 @@
 
 #include "gcrs2itrs.hpp"
 
-inline void N(float T, float &ε, float &Δψ, float &Δε){
+inline void N(float T, float &ε, float &Δψ, float &Δε)
+{
     float T2=T*T;
     float T3=T2*T;
     float ARG;
@@ -47,7 +48,8 @@ inline void N(float T, float &ε, float &Δψ, float &Δε){
     Δε = (Δε/3600) * (M_PI/180);
 }
 
-inline void P(float T, float &z, float &ϑ, float &ζ){
+inline void P(float T, float &z, float &ϑ, float &ζ)
+{
     float T2=T*T;
     float T3=T2*T;
 
@@ -61,7 +63,8 @@ inline void P(float T, float &z, float &ϑ, float &ζ){
     ζ = ζ/3600 * (M_PI/180);
 }
 
-inline QMatrix3x3 Q(float T){
+inline QMatrix3x3 Q(float T)
+{
     float ε;
     float Δψ;
     float Δε;
@@ -79,7 +82,8 @@ inline QMatrix3x3 Q(float T){
     return Q;
 }
 
-inline QMatrix3x3 W(){
+inline QMatrix3x3 W()
+{
     float X = 0.125751/3600 * (M_PI/180);
     float Y = -0.358457/3600 * (M_PI/180);
 
@@ -88,7 +92,8 @@ inline QMatrix3x3 W(){
     return W;
 }
 
-inline float H(float JDt){
+inline float H(float JDt)
+{
     float H;
     int D0, UT1;
     std::div_t dv = std::div(JDt - 0.5 * 86400, 86400);
@@ -107,7 +112,8 @@ inline float H(float JDt){
     return H;
 }
 
-inline float ΔH(float T){
+inline float ΔH(float T)
+{
     float ΔH;
     float ε, Δψ, Δε;
     N(T, ε, Δψ, Δε);

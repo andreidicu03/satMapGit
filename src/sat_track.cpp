@@ -15,14 +15,16 @@ https://en.wikipedia.org/wiki/Sidereal_time#Sidereal_time
 https://celestrak.com/columns/v02n02/
 */
 
-satellite::satellite(){
+satellite::satellite()
+{
     this->a = cbrt( (G * Me) / pow(n, 2) );
     this->t=QDateTime::currentDateTimeUtc();
     this->satDate.setTimeSpec(Qt::UTC);
     this->t.setTimeSpec(Qt::UTC);
 };
 
-satellite::satellite(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime, latlong homeCoord){
+satellite::satellite(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime, latlong homeCoord)
+{
     this->homeCoord=homeCoord;
     this->catalogNr=catNr;
     this->Name=QString::fromStdString(Name);
@@ -62,12 +64,14 @@ satellite::satellite(std::string Name, int catNr, std::string Epoch, float e1, f
     this->satDate.setTime(time);
 }
 
-satellite::~satellite(){
+satellite::~satellite()
+{
     t.~QDateTime();
     satDate.~QDateTime();
 }
 
-void satellite::satInit(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime, latlong homeCoord){
+void satellite::satInit(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime, latlong homeCoord)
+{
     this->homeCoord=homeCoord;
     this->catalogNr=catNr;
     this->Name=QString::fromStdString(Name);
@@ -113,7 +117,8 @@ void satellite::satInit(std::string Name, int catNr, std::string Epoch, float e1
 
 https://en.wikipedia.org/wiki/Kepler%27s_equation#Numerical_approximation_of_inverse_problem
 */
-float satellite::eccentric_anomaly(){
+float satellite::eccentric_anomaly()
+{
     this->E=0;
     float M=0, dt=0;
     int accuracy=10;
@@ -153,7 +158,8 @@ Faster Methods (ECI): (Precalculate Matrices)
 https://modelica.org/events/modelica2008/Proceedings/sessions/session4d1.pdf
 https://downloads.rene-schwarz.com/download/M001-Keplerian_Orbit_Elements_to_Cartesian_State_Vectors.pdf
 */
-QGenericMatrix<1,3,float> satellite::ECI(){
+QGenericMatrix<1,3,float> satellite::ECI()
+{
     // true anomaly [rad] & radius [m]
     float ν = 2 * atan(sqrt((1 + e) / (1 - e)) * tan(eccentric_anomaly() / 2));
     float r = (a * (1 - pow(e, 2))) / (1 + e * cos(ν));
@@ -171,7 +177,8 @@ QGenericMatrix<1,3,float> satellite::ECI(){
     return ECI;
 }
 
-QGenericMatrix<1,3,float> satellite::ECEF(){
+QGenericMatrix<1,3,float> satellite::ECEF()
+{
     //obttaining Terrestrial Time
     QDateTime orig;
     orig.setTimeSpec(Qt::UTC);
@@ -212,7 +219,8 @@ https://journals.pan.pl/Content/98324/PDF/art05.pdf
 https://www.mygeodesy.id.au/documents/Transforming%20Cartesian%20Coordinates.pdf
 */
 
-latlong satellite::LLH(){
+latlong satellite::LLH()
+{
     latlong satPos;
 
     QGenericMatrix<1,3,float> ECEF=this->ECEF();
@@ -264,7 +272,8 @@ WGS84
 https://gssc.esa.int/navipedia/index.php/Transformations_between_ECEF_and_ENU_coordinates
 */
 
-latlong satellite::ENU(){
+latlong satellite::ENU()
+{
     latlong satCoords, radHome;
 
     QGenericMatrix<1,3,float> ECEF=this->ECEF();
@@ -319,7 +328,8 @@ latlong satellite::ENU(){
     return satCoords;
 }
 
-void satellite::coutSat(){
+void satellite::coutSat()
+{
     qDebug()<<"\n\n";
     qDebug()<<Name;
     qDebug()<<catalogNr;
@@ -334,7 +344,8 @@ void satellite::coutSat(){
     qDebug()<<i;// inclination
 }
 
-QStringList satellite::passPredict(int hours, int accuracy){
+QStringList satellite::passPredict(int hours, int accuracy)
+{
     QStringList passList;
     QString pass;
 
@@ -385,7 +396,8 @@ QStringList satellite::passPredict(int hours, int accuracy){
     return passList;
 }
 
-QVector<Marble::GeoDataCoordinates> satellite::satTrail(int hours, int accuracy){
+QVector<Marble::GeoDataCoordinates> satellite::satTrail(int hours, int accuracy)
+{
     QVector<Marble::GeoDataCoordinates> pointVec;
 
     int seconds=hours*3600;
@@ -411,10 +423,12 @@ QVector<Marble::GeoDataCoordinates> satellite::satTrail(int hours, int accuracy)
     return pointVec;
 }
 
-void satellite::updateTime(QDateTime devTime){
+void satellite::updateTime(QDateTime devTime)
+{
     this->t=devTime;
 }
 
-void satellite::updateCoord(latlong homeCoord){
+void satellite::updateCoord(latlong homeCoord)
+{
     this->homeCoord=homeCoord;
 }
