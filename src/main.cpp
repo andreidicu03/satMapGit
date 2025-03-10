@@ -1,12 +1,12 @@
+#include "TLEParser.hpp"
+#include "download.hpp"
 #include "includes.hpp"
 #include "mainwindow.hpp"
 #include "sat_track.hpp"
-#include "download.hpp"
-#include "TLEParser.hpp"
 
 #include <QApplication>
-#include <QtGui/QKeyEvent>
 #include <QDebug>
+#include <QtGui/QKeyEvent>
 
 #include <locale>
 
@@ -50,9 +50,9 @@ public:
     }
 };*/
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-    QApplication app(argc,argv);
+    QApplication app(argc, argv);
 
     MainWindow a;
     a.show();

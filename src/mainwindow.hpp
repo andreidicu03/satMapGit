@@ -2,31 +2,33 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "TLEParser.hpp"
+#include "download.hpp"
 #include "includes.hpp"
 #include "sat_track.hpp"
-#include "download.hpp"
-#include "TLEParser.hpp"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui {
+class MainWindow;
+}
 QT_END_NAMESPACE
 
 class timeUp : public QThread
 {
     Q_OBJECT
 
-    void run() override {
-
+    void run() override
+    {
         QDateTime time;
-        do{
-            time=QDateTime::currentDateTimeUtc();
+        do {
+            time = QDateTime::currentDateTimeUtc();
             emit timeChanged(time);
             QThread::msleep(1000);
 
-        }while(true);
+        } while (true);
     }
-    signals:
-        void timeChanged(QDateTime time);
+signals:
+    void timeChanged(QDateTime time);
 };
 
 class MainWindow : public QMainWindow

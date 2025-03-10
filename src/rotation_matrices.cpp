@@ -3,44 +3,42 @@
 
 #include "rotation_matrices.hpp"
 
-void angleSinCos(float n, float& S, float& C){
-    S=sin(n);
-    C=cos(n);
+void angleSinCos(float n, float &S, float &C)
+{
+    S = sin(n);
+    C = cos(n);
 }
 
-QMatrix3x3 RotateX(float n){
+QMatrix3x3 RotateX(float n)
+{
     float S, C;
     angleSinCos(n, S, C);
 
-    float val []={ 1, 0, 0 ,
-                   0, C, S ,
-                   0,-S, C };
+    float val[] = {1, 0, 0, 0, C, S, 0, -S, C};
 
-   QMatrix3x3 RX(val);
+    QMatrix3x3 RX(val);
 
-   return RX;
+    return RX;
 }
 
-QMatrix3x3 RotateY(float n){
+QMatrix3x3 RotateY(float n)
+{
     float S, C;
     angleSinCos(n, S, C);
 
-    float val []={C, 0, -S,
-                  0, 1,  0,
-                  S, 0,  C};
+    float val[] = {C, 0, -S, 0, 1, 0, S, 0, C};
 
     QMatrix3x3 RY(val);
 
     return RY;
 }
 
-QMatrix3x3 RotateZ(float n){
+QMatrix3x3 RotateZ(float n)
+{
     float S, C;
     angleSinCos(n, S, C);
 
-    float val []={  C, S, 0,
-                   -S, C, 0,
-                    0, 0, 1};
+    float val[] = {C, S, 0, -S, C, 0, 0, 0, 1};
 
     QMatrix3x3 RZ(val);
 

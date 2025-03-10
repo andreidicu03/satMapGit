@@ -7,23 +7,25 @@
 download::download()
 {
     // signal finish(), calls downloadFinished()
-    connect(&manager, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(downloadFinished(QNetworkReply*)));
+    connect(&manager,
+            SIGNAL(finished(QNetworkReply *)),
+            this,
+            SLOT(downloadFinished(QNetworkReply *)));
 }
 
 void download::setURLs(QStringList args)
 {
-    this->URLs=args;
+    this->URLs = args;
 }
 
 void download::setPath(QString args)
 {
-    this->basePath=args;
+    this->basePath = args;
 }
 
 void download::execute()
 {
-     // process each url starting from the 2nd one
+    // process each url starting from the 2nd one
     foreach (QString arg, URLs) {
         // QString::toLocal8Bit()
         //  - local 8-bit representation of the string as a QByteArray
@@ -53,7 +55,7 @@ void download::doDownload(const QUrl &url)
 QString download::saveFileName(const QUrl &url)
 {
     QString path = url.path();
-    QString saveFolder=basePath;
+    QString saveFolder = basePath;
     QString basename = QFileInfo(path).fileName();
 
     if (basename.isEmpty())
@@ -71,7 +73,6 @@ QString download::saveFileName(const QUrl &url)
 
 void download::saveFileName(QString basename)
 {
-
     if (basename.isEmpty())
         basename = "unknown";
 
@@ -79,22 +80,24 @@ void download::saveFileName(QString basename)
         QFile::remove(basename);
     }
 
-    filename=basename;
+    filename = basename;
 }
 
 void download::downloadFinished(QNetworkReply *reply)
 {
     QUrl url = reply->url();
     if (reply->error()) {
-        fprintf(stderr, "Download of %s failed: %s\n",
+        fprintf(stderr,
+                "Download of %s failed: %s\n",
                 url.toEncoded().constData(),
                 qPrintable(reply->errorString()));
     } else {
-        if(this->filename.isEmpty())
+        if (this->filename.isEmpty())
             this->filename = saveFileName(url);
-        if (saveToDisk(filename, reply)){
+        if (saveToDisk(filename, reply)) {
             printf("Download of %s succeeded (saved to %s)\n",
-                   url.toEncoded().constData(), qPrintable(filename));
+                   url.toEncoded().constData(),
+                   qPrintable(filename));
             //QMessageBox about;
             //filename+=" finished downloading";
             //about.setText(filename);
@@ -105,14 +108,14 @@ void download::downloadFinished(QNetworkReply *reply)
 
     currentDownloads.removeAll(reply);
     reply->deleteLater();
-
 }
 
 bool download::saveToDisk(const QString &filename, QIODevice *reply)
 {
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
-        fprintf(stderr, "Could not open %s for writing: %s\n",
+        fprintf(stderr,
+                "Could not open %s for writing: %s\n",
                 qPrintable(filename),
                 qPrintable(file.errorString()));
         return false;
@@ -133,4 +136,3 @@ void download::sslErrors(const QList<QSslError> &sslErrors)
     Q_UNUSED(sslErrors);
 #endif
 }
-

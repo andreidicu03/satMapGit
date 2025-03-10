@@ -4,6 +4,6 @@
 
 namespace fs = std::filesystem;
 
-QList<TLEdata> SatSearch(fs::path& satPath);
+QList<TLEdata> SatSearch(fs::path &satPath);
 
 #endif // TLEPARSER_H

@@ -1,19 +1,19 @@
 #ifndef DOWNLOAD_H
 #define DOWNLOAD_H
 
-#include "includes.hpp"
-#include <QObject>
 #include <QByteArray>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QObject>
+#include "includes.hpp"
 
 #include <QFile>
 #include <QFileInfo>
 #include <QList>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QSslError>
 #include <QStringList>
 #include <QTimer>
@@ -21,10 +21,9 @@
 
 #include <stdio.h>
 
-
 class QSslError;
 
-class download: public QObject
+class download : public QObject
 {
     Q_OBJECT
     QNetworkAccessManager manager;

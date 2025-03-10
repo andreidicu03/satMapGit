@@ -17,49 +17,58 @@ https://celestrak.com/columns/v02n02/
 
 satellite::satellite()
 {
-    this->a = cbrt( (G * Me) / pow(n, 2) );
-    this->t=QDateTime::currentDateTimeUtc();
+    this->a = cbrt((G * Me) / pow(n, 2));
+    this->t = QDateTime::currentDateTimeUtc();
     this->satDate.setTimeSpec(Qt::UTC);
     this->t.setTimeSpec(Qt::UTC);
 };
 
-satellite::satellite(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime, latlong homeCoord)
+satellite::satellite(std::string Name,
+                     int catNr,
+                     std::string Epoch,
+                     float e1,
+                     float M,
+                     float n1,
+                     float w1,
+                     float W1,
+                     float i1,
+                     QDateTime devTime,
+                     latlong homeCoord)
 {
-    this->homeCoord=homeCoord;
-    this->catalogNr=catNr;
-    this->Name=QString::fromStdString(Name);
-    this->e=e1; // eccentricity
-    this->M0=M * (M_PI/180); // mean anomaly at epoch
-    this->n=n1 * (M_PI2/d2s); // mean motion (rev/day)
-    this->ω=w1 * (M_PI/180); // arg of perigee
-    this->Ω=W1 * (M_PI/180); // RAAN
-    this->i=i1 * (M_PI/180); // inclination
-    this->a = cbrt( (G * Me) / pow(n, 2) );
-    this->t=devTime;
+    this->homeCoord = homeCoord;
+    this->catalogNr = catNr;
+    this->Name = QString::fromStdString(Name);
+    this->e = e1;                 // eccentricity
+    this->M0 = M * (M_PI / 180);  // mean anomaly at epoch
+    this->n = n1 * (M_PI2 / d2s); // mean motion (rev/day)
+    this->ω = w1 * (M_PI / 180);  // arg of perigee
+    this->Ω = W1 * (M_PI / 180);  // RAAN
+    this->i = i1 * (M_PI / 180);  // inclination
+    this->a = cbrt((G * Me) / pow(n, 2));
+    this->t = devTime;
     this->satDate.setTimeSpec(Qt::UTC);
-    std::string Year=Epoch.substr(0, 2), aux=Year;//
-    if(stoi(Year)<57){
-        Year={};
-        Year="20"+aux;
-        aux={};
+    std::string Year = Epoch.substr(0, 2), aux = Year; //
+    if (stoi(Year) < 57) {
+        Year = {};
+        Year = "20" + aux;
+        aux = {};
+    } else {
+        Year = {};
+        Year = "19" + aux;
+        aux = {};
     }
-    else{
-        Year={};
-        Year="19"+aux;
-        aux={};
-    }
-    std::string Day=Epoch.substr(2, 12), fracDay="0"+Day.substr(Day.find('.'), 12);//
+    std::string Day = Epoch.substr(2, 12), fracDay = "0" + Day.substr(Day.find('.'), 12); //
     float hour, minute, sec, msec;
-    hour=24*stof(fracDay);
-    minute=60*(hour-(int)hour);
-    sec=60*(minute-(int)minute);
-    msec=1000*(sec-(int)sec);
+    hour = 24 * stof(fracDay);
+    minute = 60 * (hour - (int) hour);
+    sec = 60 * (minute - (int) minute);
+    msec = 1000 * (sec - (int) sec);
     QDate date;
     QTime time;
     date.setDate(stoi(Year), 1, 1);
-    date=date.addDays(stoi(Day)-1);
+    date = date.addDays(stoi(Day) - 1);
     time.setHMS(hour, minute, sec);
-    time=time.addMSecs(msec);
+    time = time.addMSecs(msec);
     this->satDate.setDate(date);
     this->satDate.setTime(time);
 }
@@ -70,44 +79,53 @@ satellite::~satellite()
     satDate.~QDateTime();
 }
 
-void satellite::satInit(std::string Name, int catNr, std::string Epoch, float e1, float M, float n1, float w1, float W1, float i1, QDateTime devTime, latlong homeCoord)
+void satellite::satInit(std::string Name,
+                        int catNr,
+                        std::string Epoch,
+                        float e1,
+                        float M,
+                        float n1,
+                        float w1,
+                        float W1,
+                        float i1,
+                        QDateTime devTime,
+                        latlong homeCoord)
 {
-    this->homeCoord=homeCoord;
-    this->catalogNr=catNr;
-    this->Name=QString::fromStdString(Name);
-    this->e=e1; // eccentricity
-    this->M0=M * (M_PI/180); // mean anomaly at epoch
-    this->n=n1 * (M_PI2/d2s); // mean motion (rev/day)
-    this->ω=w1 * (M_PI/180); // arg of perigee
-    this->Ω=W1 * (M_PI/180); // RAAN
-    this->i=i1 * (M_PI/180); // inclination
-    this->a = cbrt( (G * Me) / pow(n, 2) );
-    this->t=devTime;
+    this->homeCoord = homeCoord;
+    this->catalogNr = catNr;
+    this->Name = QString::fromStdString(Name);
+    this->e = e1;                 // eccentricity
+    this->M0 = M * (M_PI / 180);  // mean anomaly at epoch
+    this->n = n1 * (M_PI2 / d2s); // mean motion (rev/day)
+    this->ω = w1 * (M_PI / 180);  // arg of perigee
+    this->Ω = W1 * (M_PI / 180);  // RAAN
+    this->i = i1 * (M_PI / 180);  // inclination
+    this->a = cbrt((G * Me) / pow(n, 2));
+    this->t = devTime;
     this->satDate.setTimeSpec(Qt::UTC);
-    std::string Year=Epoch.substr(0, 2), aux=Year;//
-    if(stoi(Year)<57){
-        Year={};
-        Year="20"+aux;
-        aux={};
-    }
-    else{
-        Year={};
-        Year="19"+aux;
-        aux={};
+    std::string Year = Epoch.substr(0, 2), aux = Year; //
+    if (stoi(Year) < 57) {
+        Year = {};
+        Year = "20" + aux;
+        aux = {};
+    } else {
+        Year = {};
+        Year = "19" + aux;
+        aux = {};
     }
     this->satDate.setTimeSpec(Qt::UTC);
-    std::string Day=Epoch.substr(2, 12), fracDay="0"+Day.substr(Day.find('.'), 12);//
-    float hour=0, minute=0, sec=0, msec=0;
-    hour=24*std::stof(fracDay);
-    minute=60*(hour-(int)hour);
-    sec=60*(minute-(int)minute);
-    msec=1000*(sec-(int)sec);
+    std::string Day = Epoch.substr(2, 12), fracDay = "0" + Day.substr(Day.find('.'), 12); //
+    float hour = 0, minute = 0, sec = 0, msec = 0;
+    hour = 24 * std::stof(fracDay);
+    minute = 60 * (hour - (int) hour);
+    sec = 60 * (minute - (int) minute);
+    msec = 1000 * (sec - (int) sec);
     QDate date;
     QTime time;
     date.setDate(stoi(Year), 1, 1);
-    date=date.addDays(stoi(Day)-1);
+    date = date.addDays(stoi(Day) - 1);
     time.setHMS(hour, minute, sec);
-    time=time.addMSecs(msec);
+    time = time.addMSecs(msec);
     this->satDate.setDate(date);
     this->satDate.setTime(time);
 }
@@ -119,22 +137,20 @@ https://en.wikipedia.org/wiki/Kepler%27s_equation#Numerical_approximation_of_inv
 */
 float satellite::eccentric_anomaly()
 {
-    this->E=0;
-    float M=0, dt=0;
-    int accuracy=10;
+    this->E = 0;
+    float M = 0, dt = 0;
+    int accuracy = 10;
 
-    auto equation = [](const long double E, const float e, const long double M){
-      return M-E + e*sin(E);
+    auto equation = [](const long double E, const float e, const long double M) {
+        return M - E + e * sin(E);
     };
-    auto derivative = [](const long double E, const float e){
-      return e*cos(E)-1;
-    };
-    dt=t.toSecsSinceEpoch()-satDate.toSecsSinceEpoch();
-    M=M0 + n * dt;
-    this->E=M;
+    auto derivative = [](const long double E, const float e) { return e * cos(E) - 1; };
+    dt = t.toSecsSinceEpoch() - satDate.toSecsSinceEpoch();
+    M = M0 + n * dt;
+    this->E = M;
 
-    for(int i =0; i<accuracy; i++){
-        this->E=this->E-(equation(this->E, e, M)/derivative(this->E, e));
+    for (int i = 0; i < accuracy; i++) {
+        this->E = this->E - (equation(this->E, e, M) / derivative(this->E, e));
     }
 
     return this->E;
@@ -158,17 +174,17 @@ Faster Methods (ECI): (Precalculate Matrices)
 https://modelica.org/events/modelica2008/Proceedings/sessions/session4d1.pdf
 https://downloads.rene-schwarz.com/download/M001-Keplerian_Orbit_Elements_to_Cartesian_State_Vectors.pdf
 */
-QGenericMatrix<1,3,float> satellite::ECI()
+QGenericMatrix<1, 3, float> satellite::ECI()
 {
     // true anomaly [rad] & radius [m]
     float ν = 2 * atan(sqrt((1 + e) / (1 - e)) * tan(eccentric_anomaly() / 2));
     float r = (a * (1 - pow(e, 2))) / (1 + e * cos(ν));
 
-    QGenericMatrix<1,3,float> PQW, ECI;
+    QGenericMatrix<1, 3, float> PQW, ECI;
 
-    float val []={(float)cos(ν), (float)sin(ν), 0};
+    float val[] = {(float) cos(ν), (float) sin(ν), 0};
 
-    QGenericMatrix<1,3,float> c(val);
+    QGenericMatrix<1, 3, float> c(val);
 
     PQW = r * c;
 
@@ -177,24 +193,26 @@ QGenericMatrix<1,3,float> satellite::ECI()
     return ECI;
 }
 
-QGenericMatrix<1,3,float> satellite::ECEF()
+QGenericMatrix<1, 3, float> satellite::ECEF()
 {
     //obttaining Terrestrial Time
     QDateTime orig;
     orig.setTimeSpec(Qt::UTC);
 
-    QDate origDate; origDate.setDate(2000, 1, 1);
-    QTime origTime; origTime.setHMS(12, 0, 0);
+    QDate origDate;
+    origDate.setDate(2000, 1, 1);
+    QTime origTime;
+    origTime.setHMS(12, 0, 0);
 
     orig.setDate(origDate);
     orig.setTime(origTime);
 
-    int JD=t.toSecsSinceEpoch()-orig.toSecsSinceEpoch();
-    float TT= (JD / 86400) / 36525;
+    int JD = t.toSecsSinceEpoch() - orig.toSecsSinceEpoch();
+    float TT = (JD / 86400) / 36525;
     // calculate the semi-major axis from kepler's 3rd law
     //b = a * np.sqrt( 1 - np.power(e, 2) ) # semi-minor axis
 
-    QGenericMatrix<1,3,float> ECEF;
+    QGenericMatrix<1, 3, float> ECEF;
 
     //greenwich apparent (true) sidereal time
     float Λ = fmod((H(JD) + ΔH(TT)), M_PI2);
@@ -223,44 +241,44 @@ latlong satellite::LLH()
 {
     latlong satPos;
 
-    QGenericMatrix<1,3,float> ECEF=this->ECEF();
+    QGenericMatrix<1, 3, float> ECEF = this->ECEF();
 
     float X, Y, Z;
-    X=ECEF(0,0);
-    Y=ECEF(1,0);
-    Z=ECEF(2,0);
+    X = ECEF(0, 0);
+    Y = ECEF(1, 0);
+    Z = ECEF(2, 0);
 
     float p = sqrt(pow(X, 2) + pow(Y, 2));
     float δ = atan2(Z, p); // declination ~ geocentric latitude (MAX ± 0.01°)
 
     //compute the geodetic latitude using bowring's method & newthon-raphson iteration method
 
-    auto c = [](const long double K, const float p, const float Z){
-      return pow(p,2) + (1 - e2) * pow(Z, 2) + pow(K, 2);
+    auto c = [](const long double K, const float p, const float Z) {
+        return pow(p, 2) + (1 - e2) * pow(Z, 2) + pow(K, 2);
     };
-    auto equation = [&c](const long double K, const float p, const float Z){
-      return K - 1 - ((e2*Ee*K)/sqrt(c(K, p ,Z)));
+    auto equation = [&c](const long double K, const float p, const float Z) {
+        return K - 1 - ((e2 * Ee * K) / sqrt(c(K, p, Z)));
     };
-    auto derivative = [&c](const long double K, const float p, const float Z){
-      return (sqrt(pow(c(K, p, Z), 3)) - e2 * Ee * pow(p, 2))/sqrt(pow(c(K, p, Z), 3));
+    auto derivative = [&c](const long double K, const float p, const float Z) {
+        return (sqrt(pow(c(K, p, Z), 3)) - e2 * Ee * pow(p, 2)) / sqrt(pow(c(K, p, Z), 3));
     };
 
-    float ϕ = atan(tan(δ) * (pow(Ee, 2)/pow(Pe, 2)));
+    float ϕ = atan(tan(δ) * (pow(Ee, 2) / pow(Pe, 2)));
 
-    float K0 = tan(ϕ) * (p/Z);
-    float K=K0;
+    float K0 = tan(ϕ) * (p / Z);
+    float K = K0;
 
-    for (int i=0; i<10; i++){
-        K=K-(equation(K, p, Z)/derivative(K, p, Z));
+    for (int i = 0; i < 10; i++) {
+        K = K - (equation(K, p, Z) / derivative(K, p, Z));
     }
 
-    satPos.lat=atan(K*(Z/p));
-    satPos.lon=atan2(Y,X);
-    satPos.h=(1/e2)*((1/K)-(1/K0))*sqrt(pow(p, 2)+pow(Z,2)*pow(K,2));
+    satPos.lat = atan(K * (Z / p));
+    satPos.lon = atan2(Y, X);
+    satPos.h = (1 / e2) * ((1 / K) - (1 / K0)) * sqrt(pow(p, 2) + pow(Z, 2) * pow(K, 2));
 
-    satPos.lat=satPos.lat*180/M_PI;
-    satPos.lon=satPos.lon*180/M_PI;
-    satPos.h=satPos.h/1000;
+    satPos.lat = satPos.lat * 180 / M_PI;
+    satPos.lon = satPos.lon * 180 / M_PI;
+    satPos.h = satPos.h / 1000;
 
     return satPos;
 }
@@ -276,15 +294,15 @@ latlong satellite::ENU()
 {
     latlong satCoords, radHome;
 
-    QGenericMatrix<1,3,float> ECEF=this->ECEF();
+    QGenericMatrix<1, 3, float> ECEF = this->ECEF();
 
-    radHome.lat=homeCoord.lat*(M_PI/180);
-    radHome.lon=homeCoord.lon*(M_PI/180);
-    radHome.h=homeCoord.h;
+    radHome.lat = homeCoord.lat * (M_PI / 180);
+    radHome.lon = homeCoord.lon * (M_PI / 180);
+    radHome.h = homeCoord.h;
 
-    float N=Ee/sqrt(1 - e2 * pow(sin(radHome.lat), 2));
+    float N = Ee / sqrt(1 - e2 * pow(sin(radHome.lat), 2));
 
-    float Xr=0, Yr=0, Zr=0;
+    float Xr = 0, Yr = 0, Zr = 0;
 
     Xr = (N + radHome.h) * cos(radHome.lat) * cos(radHome.lon);
     Yr = (N + radHome.h) * cos(radHome.lat) * sin(radHome.lon);
@@ -293,55 +311,55 @@ latlong satellite::ENU()
     //ΔX=ECR(0, 0)-Xr;
     //ΔY=ECR(0, 1)-Yr;
     //ΔZ=ECR(0, 2)-Zr;
-    float val []={Xr, Yr, Zr};
+    float val[] = {Xr, Yr, Zr};
 
-    QGenericMatrix<1,3,float> r(val);
+    QGenericMatrix<1, 3, float> r(val);
 
-    QGenericMatrix<1,3,float> Δ;
-    Δ=ECEF-r;
+    QGenericMatrix<1, 3, float> Δ;
+    Δ = ECEF - r;
 
-    QMatrix3x3 RXZ=RotateX(M_PI/2-radHome.lat)*RotateZ(M_PI/2+radHome.lon);
-    QGenericMatrix<1,3,float> ENU;
-    ENU=RXZ*Δ;
+    QMatrix3x3 RXZ = RotateX(M_PI / 2 - radHome.lat) * RotateZ(M_PI / 2 + radHome.lon);
+    QGenericMatrix<1, 3, float> ENU;
+    ENU = RXZ * Δ;
 
     //qDebug()<<ENU;
 
     float X, Y, Z;
-    X=ENU(0,0);
-    Y=ENU(1,0);
-    Z=ENU(2,0);
+    X = ENU(0, 0);
+    Y = ENU(1, 0);
+    Z = ENU(2, 0);
 
-    satCoords.lat=0;
-    satCoords.lon=0;
-    satCoords.h=0;
+    satCoords.lat = 0;
+    satCoords.lon = 0;
+    satCoords.h = 0;
 
-    if(X>=0)
-        satCoords.lon=(M_PI / 2) - atan(Y / X);
+    if (X >= 0)
+        satCoords.lon = (M_PI / 2) - atan(Y / X);
     else
-        satCoords.lon=(M_PI / 2) - (atan(Y / X) + M_PI);
+        satCoords.lon = (M_PI / 2) - (atan(Y / X) + M_PI);
 
-    satCoords.lat=atan(Z / sqrt(pow(X, 2) + pow(Y, 2)));
+    satCoords.lat = atan(Z / sqrt(pow(X, 2) + pow(Y, 2)));
 
-    satCoords.lat=satCoords.lat*180/M_PI;
-    satCoords.lon=satCoords.lon*180/M_PI;
+    satCoords.lat = satCoords.lat * 180 / M_PI;
+    satCoords.lon = satCoords.lon * 180 / M_PI;
 
     return satCoords;
 }
 
 void satellite::coutSat()
 {
-    qDebug()<<"\n\n";
-    qDebug()<<Name;
-    qDebug()<<catalogNr;
-    qDebug()<<t<<satDate;
-    qDebug()<<a;// semi major axis
-    qDebug()<<e;// eccentricity
-    qDebug()<<E;// Eccentric anomaly
-    qDebug()<<M0;// mean anomaly at epoch
-    qDebug()<<n;// mean motion (rev/day)
-    qDebug()<<ω;// arg of perigee
-    qDebug()<<Ω;// RAAN
-    qDebug()<<i;// inclination
+    qDebug() << "\n\n";
+    qDebug() << Name;
+    qDebug() << catalogNr;
+    qDebug() << t << satDate;
+    qDebug() << a;  // semi major axis
+    qDebug() << e;  // eccentricity
+    qDebug() << E;  // Eccentric anomaly
+    qDebug() << M0; // mean anomaly at epoch
+    qDebug() << n;  // mean motion (rev/day)
+    qDebug() << ω;  // arg of perigee
+    qDebug() << Ω;  // RAAN
+    qDebug() << i;  // inclination
 }
 
 QStringList satellite::passPredict(int hours, int accuracy)
@@ -349,49 +367,48 @@ QStringList satellite::passPredict(int hours, int accuracy)
     QStringList passList;
     QString pass;
 
-    QDateTime finish_Prediction=QDateTime::fromSecsSinceEpoch(this->t.toSecsSinceEpoch()+hours*3600);
+    QDateTime finish_Prediction = QDateTime::fromSecsSinceEpoch(this->t.toSecsSinceEpoch()
+                                                                + hours * 3600);
 
     latlong currentAzEl;
-    int passCount=0;
+    int passCount = 0;
 
-    bool hasPassStarted=false;
-    long double startAz, endAz, maxElev=0;
+    bool hasPassStarted = false;
+    long double startAz, endAz, maxElev = 0;
     long long int start, finish, duration;
 
-    for(long long int i=t.toSecsSinceEpoch(); i<finish_Prediction.toSecsSinceEpoch(); i=i+accuracy){
-        t=QDateTime::fromSecsSinceEpoch(i);
-        currentAzEl=this->ENU();
-        maxElev=0;
-        start=i;
-        while(currentAzEl.lat>0 && i<finish_Prediction.toSecsSinceEpoch()){
-            if(!hasPassStarted)
-            {
-                startAz=currentAzEl.lon;
-                start=i;
+    for (long long int i = t.toSecsSinceEpoch(); i < finish_Prediction.toSecsSinceEpoch();
+         i = i + accuracy) {
+        t = QDateTime::fromSecsSinceEpoch(i);
+        currentAzEl = this->ENU();
+        maxElev = 0;
+        start = i;
+        while (currentAzEl.lat > 0 && i < finish_Prediction.toSecsSinceEpoch()) {
+            if (!hasPassStarted) {
+                startAz = currentAzEl.lon;
+                start = i;
                 passCount++;
-                hasPassStarted=true;
+                hasPassStarted = true;
             }
-            if(maxElev<currentAzEl.lat)
-                maxElev=currentAzEl.lat;
+            if (maxElev < currentAzEl.lat)
+                maxElev = currentAzEl.lat;
             this->updateTime(QDateTime::fromSecsSinceEpoch(i));
-            currentAzEl=this->ENU();
-            i=i+accuracy;
+            currentAzEl = this->ENU();
+            i = i + accuracy;
         }
-        if(hasPassStarted){
-            endAz=currentAzEl.lon;
-            finish=i;
-            duration=finish-start;
-            pass=   QString::number(passCount)+";"
-                    +QDateTime::fromSecsSinceEpoch(start).toString()+";"
-                    +QString::number((double)startAz)+";"
-                    +QString::number((double)maxElev)+";"
-                    +QString::number((double)endAz)+";"
-                    +QDateTime::fromSecsSinceEpoch(finish).toString()+";"
-                    +QString::number(duration);
+        if (hasPassStarted) {
+            endAz = currentAzEl.lon;
+            finish = i;
+            duration = finish - start;
+            pass = QString::number(passCount) + ";"
+                   + QDateTime::fromSecsSinceEpoch(start).toString() + ";"
+                   + QString::number((double) startAz) + ";" + QString::number((double) maxElev)
+                   + ";" + QString::number((double) endAz) + ";"
+                   + QDateTime::fromSecsSinceEpoch(finish).toString() + ";"
+                   + QString::number(duration);
             passList.append(pass);
-            hasPassStarted=false;
+            hasPassStarted = false;
         }
-
     }
     return passList;
 }
@@ -400,18 +417,19 @@ QVector<Marble::GeoDataCoordinates> satellite::satTrail(int hours, int accuracy)
 {
     QVector<Marble::GeoDataCoordinates> pointVec;
 
-    int seconds=hours*3600;
+    int seconds = hours * 3600;
     QDateTime start, finish;
-    start=QDateTime::fromSecsSinceEpoch(this->t.toSecsSinceEpoch()-(seconds/2));
-    finish=QDateTime::fromSecsSinceEpoch(this->t.toSecsSinceEpoch()+(seconds/2));
-    int increment=(hours*3600)/accuracy;
+    start = QDateTime::fromSecsSinceEpoch(this->t.toSecsSinceEpoch() - (seconds / 2));
+    finish = QDateTime::fromSecsSinceEpoch(this->t.toSecsSinceEpoch() + (seconds / 2));
+    int increment = (hours * 3600) / accuracy;
 
-    qDebug()<<start<<" "<<finish;
+    qDebug() << start << " " << finish;
 
-    for(long long int i=start.toSecsSinceEpoch(); i<=finish.toSecsSinceEpoch(); i=i+increment){
-        this->t=QDateTime::fromSecsSinceEpoch(i);
+    for (long long int i = start.toSecsSinceEpoch(); i <= finish.toSecsSinceEpoch();
+         i = i + increment) {
+        this->t = QDateTime::fromSecsSinceEpoch(i);
         Marble::GeoDataCoordinates point;
-        latlong pnt=this->LLH();
+        latlong pnt = this->LLH();
 
         point.setLatitude(pnt.lat);
         point.setLongitude(pnt.lon);
@@ -425,10 +443,10 @@ QVector<Marble::GeoDataCoordinates> satellite::satTrail(int hours, int accuracy)
 
 void satellite::updateTime(QDateTime devTime)
 {
-    this->t=devTime;
+    this->t = devTime;
 }
 
 void satellite::updateCoord(latlong homeCoord)
 {
-    this->homeCoord=homeCoord;
+    this->homeCoord = homeCoord;
 }
