@@ -8,8 +8,7 @@ QList<TLEdata> SatSearch(fs::path &satPath)
     std::string buf = {};
     fs::path iter;
     int i = 0;
-    if (!fs::is_directory(
-            satPath)) //if the object isn't a directory it tries to open it with fstream
+    if (!fs::is_directory(satPath)) //if the object isn't a directory it tries to open it with fstream
     {
         iter = satPath;
         std::ifstream f(satPath);

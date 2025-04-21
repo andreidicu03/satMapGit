@@ -39,11 +39,15 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-unix {
-    LIBS += -L/usr/lib/ \
-    -lmarblewidget-qt5
-    INCLUDEPATH += /usr/include/marble
-    DEPENDPATH += /usr/include/marble
-}
+#unix {
+#   LIBS += -L/usr/lib/ \
+#    -llibmarblewidget-qt6
+#    INCLUDEPATH += /usr/include/marble
+#    DEPENDPATH += /usr/include/marble
+#}
 
-DISTFILES +=
+
+unix:!macx: LIBS += -L$$PWD/../../../usr/lib/ -lmarblewidget-qt6
+
+INCLUDEPATH += $$PWD/../../../usr/include/marble
+DEPENDPATH += $$PWD/../../../usr/include/marble

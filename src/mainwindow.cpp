@@ -1,6 +1,7 @@
 #include "mainwindow.hpp"
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QRegularExpression>
 #include "fileSearch.hpp"
 #include "ui_mainwindow.h"
 
@@ -88,7 +89,7 @@ void MainWindow::writeSettings()
     settings.setValue("homeCoordlon", QVariant::fromValue(QString::number((double) homeCoord.lon)));
     settings.setValue("homeCoordh", QVariant::fromValue(QString::number((double) homeCoord.h)));
     QString links = ui->links->toPlainText();
-    QStringList linkList = links.split(QRegExp("[\n]"));
+    QStringList linkList = links.split(QRegularExpression("[\n]"));
 
     settings.setValue("passDuration", QVariant::fromValue(passDuration));
     settings.setValue("passAcc", QVariant::fromValue(passAcc));
@@ -234,7 +235,7 @@ void MainWindow::on_actionUpdate_TLEs_triggered()
                                          tr("QInputDialog::getText()"),
                                          tr("URL:"),
                                          QLineEdit::Normal,
-                                         "https://celestrak.com/NORAD/elements/active.txt",
+                                         "https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=tle",
                                          &ok);
     if (ok) {
         QStringList URLs;
@@ -339,7 +340,7 @@ void MainWindow::on_satBox_currentIndexChanged(int index)
         ui->satPassesTable->insertRow(i);
 
         QString currentPass = satPasses[i];
-        QStringList properties = currentPass.split(";", QString::SkipEmptyParts);
+        QStringList properties = currentPass.split(";", Qt::SkipEmptyParts);
 
         QTableWidgetItem *cell;
 

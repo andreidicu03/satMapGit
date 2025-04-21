@@ -1,4 +1,6 @@
 #include "sat_track.hpp"
+#include "rotation_matrices.hpp"
+#include "gcrs2itrs.cpp"
 
 /*
          Greenwich Mean Sidereal Time (GMST) - (Old) Earth Rotation Angle
@@ -19,8 +21,8 @@ satellite::satellite()
 {
     this->a = cbrt((G * Me) / pow(n, 2));
     this->t = QDateTime::currentDateTimeUtc();
-    this->satDate.setTimeSpec(Qt::UTC);
-    this->t.setTimeSpec(Qt::UTC);
+    this->satDate.setTimeZone(QTimeZone::UTC);
+    this->t.setTimeZone(QTimeZone::UTC);
 };
 
 satellite::satellite(std::string Name,
@@ -46,7 +48,7 @@ satellite::satellite(std::string Name,
     this->i = i1 * (M_PI / 180);  // inclination
     this->a = cbrt((G * Me) / pow(n, 2));
     this->t = devTime;
-    this->satDate.setTimeSpec(Qt::UTC);
+    this->satDate.setTimeZone(QTimeZone::UTC);
     std::string Year = Epoch.substr(0, 2), aux = Year; //
     if (stoi(Year) < 57) {
         Year = {};
@@ -102,7 +104,7 @@ void satellite::satInit(std::string Name,
     this->i = i1 * (M_PI / 180);  // inclination
     this->a = cbrt((G * Me) / pow(n, 2));
     this->t = devTime;
-    this->satDate.setTimeSpec(Qt::UTC);
+    this->satDate.setTimeZone(QTimeZone::UTC);
     std::string Year = Epoch.substr(0, 2), aux = Year; //
     if (stoi(Year) < 57) {
         Year = {};
@@ -113,7 +115,7 @@ void satellite::satInit(std::string Name,
         Year = "19" + aux;
         aux = {};
     }
-    this->satDate.setTimeSpec(Qt::UTC);
+    this->satDate.setTimeZone(QTimeZone::UTC);
     std::string Day = Epoch.substr(2, 12), fracDay = "0" + Day.substr(Day.find('.'), 12); //
     float hour = 0, minute = 0, sec = 0, msec = 0;
     hour = 24 * std::stof(fracDay);
@@ -197,7 +199,7 @@ QGenericMatrix<1, 3, float> satellite::ECEF()
 {
     //obttaining Terrestrial Time
     QDateTime orig;
-    orig.setTimeSpec(Qt::UTC);
+    orig.setTimeZone(QTimeZone::UTC);
 
     QDate origDate;
     origDate.setDate(2000, 1, 1);

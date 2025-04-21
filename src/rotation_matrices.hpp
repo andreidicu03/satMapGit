@@ -1,8 +1,7 @@
 #ifndef ROTATION_MATRICES_H
 #define ROTATION_MATRICES_H
 
-#include <QGenericMatrix>
-#include <cmath>
+#include "includes.hpp"
 
 void angleSinCos(float n, float &S, float &C);
 QMatrix3x3 RotateX(float n);

@@ -2,6 +2,7 @@
 #define INCLUDES_H
 
 #include <marble/GeoDataLineString.h>
+#include <marble/GeoDataCoordinates.h>
 #include <marble/GeoPainter.h>
 #include <marble/LayerInterface.h>
 #include <marble/MarbleMap.h>
@@ -19,16 +20,12 @@
 #include <QString>
 #include <QThread>
 #include <QtCore>
+#include <QGenericMatrix>
 
 #define _USE_MATH_DEFINES
 
 #include <cmath>
-#include <filesystem>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
 #include <string>
-#include <vector>
 
 #define M_PI2 M_PI * 2
 

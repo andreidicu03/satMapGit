@@ -1,7 +1,6 @@
 #ifndef SAT_TRACK_H
 #define SAT_TRACK_H
 
-#include "gcrs2itrs.cpp"
 #include "includes.hpp"
 
 class satellite
